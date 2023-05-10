@@ -4,9 +4,9 @@
     "max level": 3,
     "exp gained per use": 100,
     "values": {
-      "1": 14,
-      "2": 17,
-      "3": 20
+      "1": "14",
+      "2": "17",
+      "3": "20"
     },
     "cooldown": {
       "all": 300

@@ -74,7 +74,13 @@ public final class FileKitMastery extends RPKitSpigot implements CustomKitMaster
             for(String s : m.getLore()) {
                 if(s.contains("{REQUIREMENT}")) {
                     final CustomKit kit = kitKeys[req];
-                    final String name = kit.getItem().getItemMeta().getDisplayName();
+                    final ItemStack kit_item = kit != null ? kit.getItem() : null;
+                    final String name;
+                    if(kit_item != null) {
+                        name = kit.getItem().getItemMeta().getDisplayName();
+                    } else {
+                        name = "???";
+                    }
                     s = s.replace("{REQUIREMENT}", name).replace("{TIER}", toRoman(re.get(kit)));
                     req++;
                 }

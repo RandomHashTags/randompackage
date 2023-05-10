@@ -41,9 +41,11 @@ public final class FileInventoryPet extends RPAddonSpigot implements InventoryPe
         attributes = parse_list_string_in_json(json, "attributes");
 
         values = new HashMap<>();
-        final JSONObject values_json = settings_json.getJSONObject("values");
-        for(String level : values_json.keySet()) {
-            values.put(Integer.parseInt(level), values_json.getString(level));
+        final JSONObject values_json = parse_json_in_json(settings_json, "values", null);
+        if(values_json != null) {
+            for(String level : values_json.keySet()) {
+                values.put(Integer.parseInt(level), values_json.getString(level));
+            }
         }
 
         cooldowns = new HashMap<>();

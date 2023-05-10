@@ -9,6 +9,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -63,8 +64,7 @@ public final class FileFallenHero extends RPFallenHeroSpigot implements FallenHe
         return getClone(spawn_item);
     }
     @Override
-    @NotNull
-    public ItemStack getGem() {
+    public @NotNull ItemStack getGem() {
         return getClone(gem);
     }
     public void spawn(LivingEntity summoner, Location loc, CustomKit kit) {

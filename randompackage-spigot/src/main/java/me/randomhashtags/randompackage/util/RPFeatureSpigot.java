@@ -233,7 +233,7 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
         if(hasChance && RANDOM.nextInt(100) > Integer.parseInt(item_path_lowercase.split("chance=")[1].split(";")[0])) {
             return null;
         }
-        if(item_path_lowercase.contains("spawner") && !item_path_lowercase.startsWith("mob_spawner") && !path.equals("mysterymobspawner")) {
+        if(item_path_lowercase.contains("spawner") && !item_path_lowercase.startsWith("mob_spawner") && (path == null || !path.equals("mysterymobspawner"))) {
             return getSpawner(item_path_lowercase);
         } else if(item_path_lowercase.startsWith("enchantedbook:")) {
             final String[] values = item_path_lowercase.split(":");

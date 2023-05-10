@@ -91,7 +91,7 @@ public abstract class Kits implements RPFeatureSpigot, CommandExecutor {
             if(!OTHER_YML.getBoolean("saved default fallen heroes")) {
                 final String[] f = new String[] {"GKIT", "VKIT", "MKIT"};
                 for(String s : f) {
-                    save("fallen heroes", s + ".yml");
+                    save("fallen heroes", s + ".json");
                 }
                 OTHER_YML.set("saved default fallen heroes", true);
                 saveOtherData();

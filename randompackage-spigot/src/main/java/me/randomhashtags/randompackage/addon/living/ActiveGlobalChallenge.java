@@ -51,7 +51,7 @@ public final class ActiveGlobalChallenge implements RPStorage {
     }
 
     public long getRemainingTime() {
-        return started+type.getDuration()*1000-System.currentTimeMillis();
+        return (started + type.getDuration() * 1000) - System.currentTimeMillis();
     }
     public void increaseValue(UUID player, BigDecimal value) {
         final GlobalChallenges global_challenges = GlobalChallenges.INSTANCE;

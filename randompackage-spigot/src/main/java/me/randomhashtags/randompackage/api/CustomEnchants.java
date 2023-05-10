@@ -151,7 +151,7 @@ public enum CustomEnchants implements EventAttributes, CommandExecutor, Listener
                                             }
                                         }, ticks, ticks);
                                         timedEnchants.put(custom_enchant, id);
-                                        enchantTicks.put(rarity.getApplyColors() + custom_enchant.getName(), ticks);
+                                        enchantTicks.put(rarity.getApplyColors() + getLocalizedName(custom_enchant), ticks);
                                     }
                                 }
                             }
