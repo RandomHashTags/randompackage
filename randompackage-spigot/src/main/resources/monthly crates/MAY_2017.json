@@ -33,11 +33,11 @@
     "Spring is coming",
     "Vitamin D",
     "title:145||title:191",
-    "transmogscroll;amount=2-4",
+    "transmog_scroll:REGULAR;amount=2-4",
     "enchantmentorb:armor:random:50-75;amount=2||enchantmentorb:weapon:random:50-75;amount=2",
     "fallenhero:VKIT;amount=1-2",
     "fallenhero:GKIT;amount=1-2",
-    "randomizationscroll;amount=2-3",
+    "randomization_scroll:RANDOM;amount=2-3",
     "factioncrystal;amount=5-15"
   ],
   "bonus": [

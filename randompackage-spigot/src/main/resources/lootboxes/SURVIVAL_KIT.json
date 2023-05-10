@@ -47,7 +47,7 @@
   },
   "regular loot size": 3,
   "regular loot": [
-    "blackscroll:HEROIC;amount=2",
+    "black_scroll:HEROIC;amount=2",
     "dimensionweb;amount=2",
     "resettoolkit",
     "maskgenerator",
@@ -57,7 +57,7 @@
     "kothlootbag",
     "customexplosion:CREEPER_STUN;amount=8",
     "soultracker:LEGENDARY;amount=2",
-    "randomizationscroll:GODLY;amount=3",
+    "randomization_scroll:GODLY;amount=3",
     "servercrate:GODLY;amount=2",
     "enchantmentorb:armor14"
   ],

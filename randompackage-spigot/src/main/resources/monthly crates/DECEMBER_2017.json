@@ -32,10 +32,10 @@
   "rewards": [
     "Space Snowman",
     "title:195||title:196",
-    "randomizationscroll:random;amount=2-3",
+    "randomization_scroll:random;amount=2-3",
     "showcaseexpansion;amount=3-4",
     "mysterycrate;amount=1||servercrate:GODLY",
-    "whitescroll;amount=1-3||blackscroll:REGULAR:100;amount=1-3",
+    "white_scroll:REGULAR;amount=1-3||black_scroll:REGULAR:100;amount=1-3",
     "banknote:2-20000000",
     "monthlycrate:DECEMBER_2015",
     "dimensionweb||fuelcell||enchantedobsidian"

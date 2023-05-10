@@ -58,12 +58,12 @@
     "enchantedobsidian;amount=4",
     "inventorypet:STRONGHOLD",
     "trinket:EMP_PULSE",
-    "blackscroll:REGULAR;amount=3",
+    "black_scroll:REGULAR;amount=3",
     "mysterypetbox",
     "multimask:ZEUS,DUNGEON",
     "equipmentlootbox:DIMENSIONAL_TRAVELER",
     "equipmentlootbox:YETI",
-    "transmogscroll:GODLY;amount=2"
+    "transmog_scroll:GODLY;amount=2"
   ],
   "jackpot loot": [
     "multicustomarmorcrystal:DRAGON,YETI",

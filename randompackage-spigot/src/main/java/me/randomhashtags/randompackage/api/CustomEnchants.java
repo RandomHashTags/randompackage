@@ -176,8 +176,8 @@ public enum CustomEnchants implements EventAttributes, CommandExecutor, Listener
         for(CustomEnchantSpigot e : timedEnchants.keySet()) {
             SCHEDULER.cancelTask(timedEnchants.get(e));
         }
-        GivedpItem.INSTANCE.items.remove("transmogscroll");
-        GivedpItem.INSTANCE.items.remove("whitescroll");
+        GivedpItem.INSTANCE.items.remove("transmog_scroll:REGULAR");
+        GivedpItem.INSTANCE.items.remove("white_scroll:REGULAR");
         CustomEnchantEntity.deleteAll();
         unregister(Feature.CUSTOM_ENCHANT_ENABLED, Feature.CUSTOM_ENCHANT_RARITY);
     }

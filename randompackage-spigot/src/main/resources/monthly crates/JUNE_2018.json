@@ -33,7 +33,7 @@
     "paper",
     "title",
     "itemnametag;amount=2-3||itemlorecrystal;amount=2-3",
-    "randomizationscroll:GODLY;amount=1-4",
+    "randomization_scroll:GODLY;amount=1-4",
     "equipmentlootbox",
     "raritybook:HEROIC;amount=1-3",
     "heroicfactioncrystal;amount=1-3",

@@ -31,11 +31,11 @@
   "rewards": [
     "Intergalactic Fidget Spinner",
     "title:188||title:193",
-    "transmogscroll;amount=4",
+    "transmog_scroll:REGULAR;amount=4",
     "maxhomeincrease;amount=1-2",
     "showcaseexpansion;amount=1-2",
     "spacechest:GODLY;amount=2||spacechest:LEGENDARY;amount=2",
-    "whitescroll;amount=2-4||blackscroll:REGULAR:100;amount=2-4",
+    "white_scroll:REGULAR;amount=2-4||black_scroll:REGULAR:100;amount=2-4",
     "factionxpbooster:5.0:900||factionmcmmobooster:5.0:900",
     "factioncrystal;amount=10-25",
     "enchantmentorb:armor12:50-75||enchantmentorb:weapon12:50-75"

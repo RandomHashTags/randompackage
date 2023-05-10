@@ -37,7 +37,7 @@
     "fallenherogem:VKIT_TROLL",
     "fallenhero:GKIT_VIKING;amount=2",
     "fallenhero:GKIT_BUTCHER;amount=2",
-    "whitescroll;amount=1-4",
+    "white_scroll:REGULAR;amount=1-4",
     "rarityfireball:SOUL;amount=2-4",
     "enchantmentorb:armor:90-100;amount=1-2||enchantmentorb:weapon:90-100;amount=1-2"
   ],

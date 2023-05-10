@@ -38,7 +38,7 @@
     "paper",
     "fallenhero:GKIT_ARCANE||fallenhero:GKIT_TRICKSTER",
     "spaceflare:LEGENDARY",
-    "blackscroll:REGULAR:100;amount=2"
+    "black_scroll:REGULAR:100;amount=2"
   ],
   "bonus": [
     "spaceflare:GODLY",

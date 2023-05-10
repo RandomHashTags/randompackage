@@ -219,37 +219,39 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 		final Inventory inv = this.inv.getInventory();
 		int f = 0;
 		final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.ACTIVE;
-		final Collection<ActiveGlobalChallenge> active_global_challenges = active.values();
-		final ActiveGlobalChallenge[] active_challenges = active_global_challenges.toArray(new ActiveGlobalChallenge[active_global_challenges.size()]);
-		final List<String> addedLore = colorizeListString(config.getStringList("challenge settings.added lore"));
-		for(int i = 0; i < inv.getSize(); i++) {
-			if(config.get("gui." + i) != null) {
-				final String targetItem = config.getString("gui." + i + ".item");
-				ItemStack item = null;
-				if(targetItem != null && targetItem.equalsIgnoreCase("{CHALLENGE}")) {
-					ActiveGlobalChallenge targetChallenge = f < active.size() ? active_challenges[f] : null;
-					if(targetChallenge == null && f < max) {
-						final GlobalChallenge random_challenge = getRandomChallenge();
-						targetChallenge = random_challenge != null ? random_challenge.start() : null;
-					}
-					if(targetChallenge != null) {
-						final GlobalChallenge challenge = targetChallenge.getType();
-						final String type = challenge.getType();
-						item = challenge.getItem().clone();
-						final ItemMeta itemMeta = item.getItemMeta();
-						final List<String> lore = new ArrayList<>();
-						for(String string : addedLore) {
-							lore.add(string.replace("{TYPE}", type));
+		if(active != null) {
+			final Collection<ActiveGlobalChallenge> active_global_challenges = active.values();
+			final ActiveGlobalChallenge[] active_challenges = active_global_challenges.toArray(new ActiveGlobalChallenge[active_global_challenges.size()]);
+			final List<String> addedLore = colorizeListString(config.getStringList("challenge settings.added lore"));
+			for(int i = 0; i < inv.getSize(); i++) {
+				if(config.get("gui." + i) != null) {
+					final String targetItem = config.getString("gui." + i + ".item");
+					ItemStack item = null;
+					if(targetItem != null && targetItem.equalsIgnoreCase("{CHALLENGE}")) {
+						ActiveGlobalChallenge targetChallenge = f < active.size() ? active_challenges[f] : null;
+						if(targetChallenge == null && f < max) {
+							final GlobalChallenge random_challenge = getRandomChallenge();
+							targetChallenge = random_challenge != null ? random_challenge.start() : null;
 						}
-						itemMeta.setLore(lore);
-						lore.clear();
-						item.setItemMeta(itemMeta);
-						f += 1;
+						if(targetChallenge != null) {
+							final GlobalChallenge challenge = targetChallenge.getType();
+							final String type = challenge.getType();
+							item = challenge.getItem().clone();
+							final ItemMeta itemMeta = item.getItemMeta();
+							final List<String> lore = new ArrayList<>();
+							for(String string : addedLore) {
+								lore.add(string.replace("{TYPE}", type));
+							}
+							itemMeta.setLore(lore);
+							lore.clear();
+							item.setItemMeta(itemMeta);
+							f += 1;
+						}
+					} else {
+						item = createItemStack(config, "gui." + i);
 					}
-				} else {
-					item = createItemStack(config, "gui." + i);
+					inv.setItem(i, item);
 				}
-				inv.setItem(i, item);
 			}
 		}
 	}

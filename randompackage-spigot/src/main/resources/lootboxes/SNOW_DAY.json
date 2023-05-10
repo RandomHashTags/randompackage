@@ -46,13 +46,13 @@
   "regular loot size": 3,
   "regular loot": [
     "mask:DEATH_KNIGHT",
-    "blackscroll:HEROIC",
+    "black_scroll:HEROIC",
     "equipmentlootbox",
     "superiorcrate",
     "enchantmentorb:weapon13",
     "dungeonlootbag:destroyed outpost",
     "servercrate:GODLY",
-    "randomizationscroll:GODLY;amount=2",
+    "randomization_scroll:GODLY;amount=2",
     "Yijki, World Destroyer",
     "raritygem:SOUL:5000"
   ],

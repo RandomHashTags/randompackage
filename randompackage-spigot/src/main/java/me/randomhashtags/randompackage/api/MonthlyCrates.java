@@ -140,22 +140,24 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
             final ItemStack item = gi.getItem(i);
             if(item != null && categories.containsKey(i)) {
                 final HashMap<Integer, MonthlyCrate> targetCategorySlots = categorySlots.get(categories.get(i));
-                final ItemMeta itemMeta = item.getItemMeta();
-                if(itemMeta != null) {
-                    final List<String> lore = new ArrayList<>();
-                    if(itemMeta.hasLore()) {
-                        for(String string : itemMeta.getLore()) {
-                            if(string.contains("{CRATE}")) {
-                                for(int targetSlot : targetCategorySlots.keySet()) {
-                                    lore.add(string.replace("{CRATE}", targetCategorySlots.get(targetSlot).getItem().getItemMeta().getDisplayName()));
+                if(targetCategorySlots != null) {
+                    final ItemMeta itemMeta = item.getItemMeta();
+                    if(itemMeta != null) {
+                        final List<String> lore = new ArrayList<>();
+                        if(itemMeta.hasLore()) {
+                            for(String string : itemMeta.getLore()) {
+                                if(string.contains("{CRATE}")) {
+                                    for(int targetSlot : targetCategorySlots.keySet()) {
+                                        lore.add(string.replace("{CRATE}", targetCategorySlots.get(targetSlot).getItem().getItemMeta().getDisplayName()));
+                                    }
+                                } else {
+                                    lore.add(string);
                                 }
-                            } else {
-                                lore.add(string);
                             }
                         }
+                        itemMeta.setLore(lore);
+                        item.setItemMeta(itemMeta);
                     }
-                    itemMeta.setLore(lore);
-                    item.setItemMeta(itemMeta);
                 }
             }
         }

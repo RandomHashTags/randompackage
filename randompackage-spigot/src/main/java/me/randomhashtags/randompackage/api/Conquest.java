@@ -185,7 +185,7 @@ public enum Conquest implements RPFeatureSpigot, CommandExecutor {
             location.setY(world.getHighestBlockYAt(location));
             return location;
         } else {
-            sendConsoleMessage("&cERROR &eInvalid world &f\"" + targetWorld + "\"&e for conquest \"" + chest.getIdentifier() + "\" spawn location!");
+            sendConsoleErrorMessage("Conquest", "Invalid world &f\"" + targetWorld + "\"&e for conquest \"" + chest.getIdentifier() + "\" spawn location!");
             return null;
         }
     }

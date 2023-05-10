@@ -32,7 +32,7 @@
   "rewards": [
     "Bottle o Spooky",
     "title:132||title:163",
-    "transmogscroll;amount=4-5",
+    "transmog_scroll:REGULAR;amount=4-5",
     "showcaseexpansion;amount=2-3",
     "spacechest:GODLY;amount=2||spacechest:LEGENDARY;amount=2",
     "fallenhero:GKIT;amount=2-3",

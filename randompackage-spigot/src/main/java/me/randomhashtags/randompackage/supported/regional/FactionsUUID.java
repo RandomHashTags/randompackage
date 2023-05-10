@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,20 +70,23 @@ public enum FactionsUUID implements Reflect, Regional {
 
     }
 
-    public Faction getFaction(UUID player) {
+    @Nullable
+    public Faction getFaction(@NotNull UUID player) {
         final FPlayer fp = getFPlayer(player);
         return fp != null ? fp.getFaction() : null;
     }
 
-    private FPlayer getFPlayer(UUID uuid) {
+    private FPlayer getFPlayer(@NotNull UUID uuid) {
         return fplayers.getByOfflinePlayer(Bukkit.getOfflinePlayer(uuid));
     }
-    public ChatColor getRelationColor(OfflinePlayer player, Player target) {
+    @Nullable
+    public ChatColor getRelationColor(@NotNull OfflinePlayer player, @NotNull Player target) {
         final Faction f = getFaction(player.getUniqueId());
         return f != null ? f.getColorTo(getFPlayer(target.getUniqueId())) : null;
     }
 
-    private List<UUID> getType(UUID player, String TYPE) {
+    @NotNull
+    private List<UUID> getType(@NotNull UUID player, @NotNull String relation_type) {
         final Faction f = getFaction(player);
         final String faction = f != null ? f.getTag() : null;
         if(faction == null) {
@@ -90,10 +94,10 @@ public enum FactionsUUID implements Reflect, Regional {
         }
         relations.putIfAbsent(faction, new HashMap<>());
         final HashMap<String, List<UUID>> list = relations.get(faction);
-        if(list.containsKey(TYPE)) {
-            return list.get(TYPE);
+        if(list.containsKey(relation_type)) {
+            return list.get(relation_type);
         } else {
-            final boolean isMembers = TYPE.equals("MEMBERS"), isEnemies = TYPE.equals("ENEMIES"), isAllies = TYPE.equals("ALLIES"), isTruces = TYPE.equals("TRUCES"), isNeutral = TYPE.equals("NEUTRAL");
+            final boolean isMembers = relation_type.equals("MEMBERS"), isEnemies = relation_type.equals("ENEMIES"), isAllies = relation_type.equals("ALLIES"), isTruces = relation_type.equals("TRUCES"), isNeutral = relation_type.equals("NEUTRAL");
             final List<UUID> members = new ArrayList<>();
             for(FPlayer fp : fplayers.getAllFPlayers()) {
                 if(fp != null && (
@@ -108,7 +112,7 @@ public enum FactionsUUID implements Reflect, Regional {
                     }
                 }
             }
-            list.put(TYPE, members);
+            list.put(relation_type, members);
             return members;
         }
     }
@@ -133,16 +137,18 @@ public enum FactionsUUID implements Reflect, Regional {
         return getType(player, "ENEMIES");
     }
 
-    public boolean canModify(UUID player, Location blockLocation) {
+    public boolean canModify(@NotNull UUID player, Location blockLocation) {
         final Faction p = getFPlayer(player).getFaction(), f = board.getFactionAt(new FLocation(blockLocation));
         return f.isWilderness() || p != null && p.equals(f);
     }
 
-    public List<Player> getOnlineAssociates(UUID player) {
+    @NotNull
+    public List<Player> getOnlineAssociates(@NotNull UUID player) {
         final Faction f = getFaction(player);
         return f != null ? f.getOnlinePlayers() : new ArrayList<>();
     }
 
+    @NotNull
     public List<Chunk> getRegionalChunks(String regionalIdentifier) {
         final Faction faction = factions.getByTag(regionalIdentifier);
         final List<Chunk> chunks = new ArrayList<>();
@@ -157,13 +163,14 @@ public enum FactionsUUID implements Reflect, Regional {
         return chunks;
     }
 
-    public String getRole(UUID player) {
+    public String getRole(@NotNull UUID player) {
         if(isLegacy) {
-            sendConsoleMessage("&cERROR. Make sure you're using a supported FactionsUUID version! Messages sent may appear inaccurate to others!");
+            sendConsoleErrorMessage("FactionsUUID", "Make sure you're using a supported FactionsUUID version! Messages sent may appear inaccurate to others!");
             return "";
         }
         return getFPlayer(player).getRole().getPrefix();
     }
+    @Nullable
     public String getRegionalIdentifier(UUID player) {
         final Faction f = getFaction(player);
         return f != null ? f.getTag() : null;

@@ -34,13 +34,13 @@
     "Lucky Leaf",
     "Space Pumpkin",
     "title:137",
-    "transmogscroll;amount=2",
+    "transmog_scroll:REGULAR;amount=2",
     "factionxpbooster:2.0:600",
     "factionmcmmobooster:2.0:600",
     "mysterymobspawner",
     "fallenhero:GKIT_VALENTINES",
     "spaceflare:LEGENDARY",
-    "blackscroll:REGULAR:100;amount=2"
+    "black_scroll:REGULAR:100;amount=2"
   ],
   "bonus": [
     "factionxpbooster:4.0:1800",

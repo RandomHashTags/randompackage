@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 public interface WhiteScroll extends Scroll, Applyable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
-        return new String[] { "whitescroll" };
+        return new String[] { "white_scroll" };
     }
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         WhiteScroll scroll = getWhiteScroll(originalInput.contains(":") ? originalInput.split(":")[1] : "REGULAR");

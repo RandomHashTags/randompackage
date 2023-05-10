@@ -172,7 +172,7 @@ lootbag:
   rewards:
     - "superiormysterycrate"
     - "heroicmysterycrate"
-    - "whitescroll:HOLY"
+    - "white_scroll:HOLY"
     - "omnigem:VKIT"
     - "omnigem:GKIT"
     - "mysterysoulgem"

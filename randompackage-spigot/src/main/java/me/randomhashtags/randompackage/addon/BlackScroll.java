@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface BlackScroll extends Scroll, AppliesToRarities, Percentable, GivedpItemableSpigot {
     default String[] getGivedpItemIdentifiers() {
-        return new String[] { "blackscroll" };
+        return new String[] { "black_scroll" };
     }
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final String[] values = originalInput.split(":");

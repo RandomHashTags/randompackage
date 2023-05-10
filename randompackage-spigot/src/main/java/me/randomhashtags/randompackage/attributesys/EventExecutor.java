@@ -406,7 +406,7 @@ public interface EventExecutor extends RPFeatureSpigot, EventReplacements, Event
             if(trigger(event, entities, globalattributes, eventReplacements)) {
             }
         } catch (Exception error) {
-            sendConsoleMessage("&cERROR &eGenerated a global attribute error! &e(" + RP_VERSION + ")");
+            sendConsoleErrorMessage("EventExecutor", "Generated a global attribute error! &e(" + RP_VERSION + ")");
             sendConsoleMessage("&cEquipped Custom Enchants=" + equipped.getEnchants().toString());
             sendConsoleMessage("&cEntities=" + entities.toString());
             sendConsoleMessage("&cReplacements=" + Arrays.toString(eventReplacements));
@@ -436,10 +436,10 @@ public interface EventExecutor extends RPFeatureSpigot, EventReplacements, Event
                                 PLUGIN_MANAGER.callEvent(proc);
                             }
                         } catch (Exception error) {
-                            sendConsoleMessage("&cERROR &eCustom Enchant with identifier &f" + enchant.getIdentifier() + " &egenerated an attribute error! &e(" + RP_VERSION + ")");
-                            sendConsoleMessage("&cERROR &eEntities=&f" + entities.toString());
-                            sendConsoleMessage("&cERROR &eReplacements=&f" + Arrays.toString(replacements));
-                            sendConsoleMessage("&cERROR &eAttributes=&f" + attributes);
+                            sendConsoleErrorMessage("EventExecutor", "Custom Enchant with identifier &f" + enchant.getIdentifier() + " &egenerated an attribute error! &e(" + RP_VERSION + ")");
+                            sendConsoleErrorMessage("EventExecutor", "Entities=&f" + entities.toString());
+                            sendConsoleErrorMessage("EventExecutor", "Replacements=&f" + Arrays.toString(replacements));
+                            sendConsoleErrorMessage("EventExecutor", "Attributes=&f" + attributes);
                             error.printStackTrace();
                         }
                     }

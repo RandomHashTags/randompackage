@@ -32,12 +32,12 @@
     "Winter Wonderland",
     "Cozy Space Mittens",
     "title:92||title:187",
-    "transmogscroll;amount=2-3",
+    "transmog_scroll:REGULAR;amount=2-3",
     "enchantmentorb:armor:50-75;amount=2",
     "enchantmentorb:weapon:30-60",
     "fallenhero:GKIT_TRICKSTER;amount=2",
     "fallenhero:GKIT_CANNONER;amount=2",
-    "whitescroll;amount=1-2",
+    "white_scroll:REGULAR;amount=1-2",
     "spaceflare:LEGENDARY"
   ],
   "bonus": [

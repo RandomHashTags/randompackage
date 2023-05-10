@@ -63,7 +63,7 @@
     },
     "randomization scroll": {
       "chances": "25:25:25:25",
-      "items": "randomizationscroll:GODLY||randomizationscroll:SOUL||randomizationscroll:LEGENDARY||randomizationscroll:ULTIMATE",
+      "items": "randomization_scroll:GODLY||randomization_scroll:SOUL||randomization_scroll:LEGENDARY||randomization_scroll:ULTIMATE",
       "amount": 3
     },
     "enchantment orb": {

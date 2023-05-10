@@ -147,7 +147,7 @@ shop:
   gigantic creeper:
     item: "customexplosion:CREEPER_GIGANTIC;amount=2"
   white scroll:
-    item: "whitescroll:REGULAR"
+    item: "white_scroll:REGULAR"
     cost: 5
   ultimate fireball:
     item: "rarityfireball:ULTIMATE;amount=5"
@@ -160,7 +160,7 @@ shop:
     item: "itemlorecrystal"
     cost: 2
   transmog scroll:
-    item: "transmogscroll"
+    item: "transmog_scroll:REGULAR"
     cost: 2
   showcase expansion:
     item: "showcaseexpansion"

@@ -54,7 +54,7 @@ public enum ArmorSockets implements RPFeatureSpigot {
 
         final List<ItemStack> list = new ArrayList<>();
         for(String key : getConfigurationSectionKeys(config, "types", false)) {
-            final String target_name = config.getConfigurationSection(key).getString("name");
+            final String target_name = config.getConfigurationSection("types").getConfigurationSection(key).getString("name");
             final MultilingualStringSpigotValue name = new MultilingualStringSpigotValue(target_name);
             final ArmorSocket socket = new PathArmorSocket(key, name);
             list.add(getArmorSocketItem(socket, 100));

@@ -20,7 +20,7 @@
       "item": "raritybook:RANDOM;amount=8"
     },
     "normal black scroll": {
-      "item": "blackscroll:REGULAR"
+      "item": "black_scroll:REGULAR"
     },
     "space drinks": {
       "item": "spacedrink;amount=8"

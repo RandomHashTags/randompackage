@@ -34,7 +34,7 @@
   },
   "rewards": [
     "raritybook:SIMPLE;amount=1-2;chance=50",
-    "randomizationscroll:SIMPLE;chance=50",
+    "randomization_scroll:SIMPLE;chance=50",
     "soultracker:SIMPLE;chance=50",
     "spaceflare:SIMPLE;chance=50",
     "spacechest:SIMPLE;chance=50",

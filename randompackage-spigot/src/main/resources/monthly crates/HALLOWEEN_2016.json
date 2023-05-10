@@ -39,7 +39,7 @@
     "fallenhero:GKIT_GUARDIAN||fallenhero:GKIT_HYPERDRIVE",
     "mysterymobspawner;amount=2",
     "dust:SOUL_PRIMAL;amount=4||dust:SOUL_REGULAR;amount=4",
-    "blackscroll:REGULAR:66;amount=6"
+    "black_scroll:REGULAR:66;amount=6"
   ],
   "bonus": [
     "factionxpbooster:6.66:3960",

@@ -62,9 +62,11 @@ public enum CommandManager implements Reflect {
     }
 
     @Override
-    public void load() {}
+    public void load() {
+    }
     @Override
-    public void unload() {}
+    public void unload() {
+    }
 
     public void load(RPFeatureSpigot f, List<String> baseCmds, boolean enabled) {
         final HashMap<String, String> cmds = new HashMap<>();

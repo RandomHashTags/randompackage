@@ -30,7 +30,7 @@
   },
   "rewards": [
     "raritybook:ULTIMATE;amount=1-2;chance=50",
-    "randomizationscroll:ULTIMATE;chance=50",
+    "randomization_scroll:ULTIMATE;chance=50",
     "soultracker:ULTIMATE;chance=50",
     "spaceflare:ULTIMATE;chance=50",
     "spacechest:ULTIMATE;chance=50",

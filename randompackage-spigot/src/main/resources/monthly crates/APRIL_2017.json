@@ -38,7 +38,7 @@
     "factionxpbooster:5:600||factionmcmmobooster:5:600",
     "fallenhero:GKIT;amount=1-2||fallenhero:VKIT;amount=1-2",
     "customboss:KING_SLIME",
-    "randomizationscroll:GODLY"
+    "randomization_scroll:GODLY"
   ],
   "bonus": [
     "spaceflare:GODLY",

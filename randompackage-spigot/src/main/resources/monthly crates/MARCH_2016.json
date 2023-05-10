@@ -33,12 +33,12 @@
     "Flower Bouquet",
     "Pot of Gold",
     "itemnametag",
-    "transmogscroll",
+    "transmog_scroll:REGULAR",
     "title:38",
     "mysterymobspawner",
     "customexplosion:CREEPER_TACTICAL;amount=1-3",
     "customexplosion:CREEPER_GIGANTIC;amount=2-5",
-    "blackscroll:HEROIC:100"
+    "black_scroll:HEROIC:100"
   ],
   "bonus": [
     "blazespawner",

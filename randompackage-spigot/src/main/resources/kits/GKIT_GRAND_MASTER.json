@@ -78,7 +78,7 @@
     },
     "dust or black scroll": {
       "chance": "60:40",
-      "items": "dust:ULTIMATE_REGULAR||blackscroll:REGULAR",
+      "items": "dust:ULTIMATE_REGULAR||black_scroll:REGULAR",
       "amount": 1
     }
   }

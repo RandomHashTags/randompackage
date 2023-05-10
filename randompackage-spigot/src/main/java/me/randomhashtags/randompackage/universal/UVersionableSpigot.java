@@ -102,12 +102,14 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         return nameable.getName(RandomPackage.LOCALIZATION);
     }
 
+    @NotNull
     default List<String> getStringList(@NotNull FileConfiguration yml, @NotNull String identifier) {
         FEATURE_MESSAGES.putIfAbsent(yml, new HashMap<>());
         final HashMap<String, List<String>> messages = FEATURE_MESSAGES.get(yml);
         messages.putIfAbsent(identifier, colorizeListString(yml.getStringList(identifier)));
         return messages.get(identifier);
     }
+    @NotNull
     default String getString(FileConfiguration yml, String identifier) {
         FEATURE_STRINGS.putIfAbsent(yml, new HashMap<>());
         final HashMap<String, String> strings = FEATURE_STRINGS.get(yml);
@@ -115,13 +117,16 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         return strings.get(identifier);
     }
 
+    @Nullable
     default ItemStack getClone(ItemStack is) {
         return getClone(is, null);
     }
+    @Nullable
     default ItemStack getClone(ItemStack is, ItemStack def) {
         return is != null ? is.clone() : def;
     }
 
+    @NotNull
     default Set<String> getConfigurationSectionKeys(YamlConfiguration yml, String key, boolean includeKeys, String...excluding) {
         final ConfigurationSection section = yml.getConfigurationSection(key);
         if(section != null) {
@@ -160,6 +165,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         sendConsoleMessage("&aLoaded " + what + " &e[async]");
     }
 
+    @Nullable
     default EquipmentSlot getRespectiveSlot(@NotNull String material) {
         return material.contains("HELMET") || material.contains("SKULL") || material.contains("HEAD") ? EquipmentSlot.HEAD
                 : material.contains("CHESTPLATE") || material.contains("ELYTRA") ? EquipmentSlot.CHEST
@@ -172,6 +178,12 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
     default void sendConsoleMessage(String msg) {
         CONSOLE.sendMessage(colorize("&6[RandomPackage]&r " + msg));
     }
+
+    @Override
+    default void sendConsoleErrorMessage(@NotNull String sender, String msg) {
+        sendConsoleMessage("&e[&6" + sender + " &cERROR&e]&r &c" + msg);
+    }
+
     @Override
     default int getRemainingInt(@NotNull String string) {
         string = ChatColor.stripColor(colorize(string)).replaceAll("\\p{L}", "").replaceAll("\\s", "").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "");
@@ -188,6 +200,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         return ChatColor.translateAlternateColorCodes('&', input);
     }
 
+    @NotNull
     default HashMap<String, String> getReplacements(@NotNull Object...values) {
         final HashMap<String, String> replacements = new HashMap<>();
         boolean isKey = false;
@@ -223,6 +236,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         }
     }
 
+    @Nullable
     default Entity getHitEntity(@NotNull ProjectileHitEvent event) {
         if(EIGHT || NINE || TEN) {
             final List<Entity> n = event.getEntity().getNearbyEntities(0.1, 0.1, 0.1);
@@ -326,9 +340,11 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         }
     }
 
+    @NotNull
     default String location_to_string(@NotNull Location loc) {
         return loc.getWorld().getName() + ";" + loc.getX() + ";" + loc.getY() + ";" + loc.getZ() + ";" + loc.getYaw() + ";" + loc.getPitch();
     }
+    @Nullable
     default Location string_to_location(@Nullable String string) {
         if(string != null && string.contains(";")) {
             final String[] a = string.split(";");
@@ -372,9 +388,11 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         }
     }
 
+    @NotNull
     default BlockFace getFacing(@NotNull Entity entity) {
         return LEGACY || THIRTEEN ? BLOCK_FACES[Math.round(entity.getLocation().getYaw() / 45f) & 0x7] : entity.getFacing();
     }
+    @Nullable
     default Entity get_entity_from_uuid(@NotNull UUID uuid) {
         if(EIGHT || NINE || TEN) {
             for(World w : Bukkit.getWorlds()) {
@@ -389,6 +407,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         }
         return null;
     }
+    @NotNull
     default LivingEntity getEntity(@NotNull String type, Location l, boolean spawn) {
         final boolean baby = type.contains(":") && type.toLowerCase().endsWith(":true");
         type = type.toUpperCase().split(":")[0];
@@ -429,6 +448,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
             default: return null;
         }
     }
+    @Nullable
     default LivingEntity getEntity(@NotNull String type, @NotNull Location location) {
         final World world = location.getWorld();
         if(world == null) {
@@ -522,13 +542,17 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         return fw;
     }
 
-    default Enchantment getEnchantment(String string) {
-        if(string != null) {
+    @Nullable
+    default Enchantment getEnchantment(@Nullable String string) {
+        if(string != null && string.length() >= 3) {
             string = string.toLowerCase().replace("_", "");
             for(Enchantment enchant : Enchantment.values()) {
-                final String name = enchant != null ? enchant.getName() : null;
-                if(name != null && string.startsWith(name.toLowerCase().replace("_", ""))) {
-                    return enchant;
+                try {
+                    final String name = enchant != null ? enchant.getName() : null;
+                    if(name != null && string.startsWith(name.toLowerCase().replace("_", ""))) {
+                        return enchant;
+                    }
+                } catch (Exception ignored) {
                 }
             }
             switch (string.substring(0, 3)) {
@@ -561,6 +585,8 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
                 case "aqu": return Enchantment.WATER_WORKER;
                 default: return null;
             }
+        } else {
+            sendConsoleErrorMessage("UVersionableSpigot", "Failed to parse enchantment from string due to the string == null || string.length() < 3");
         }
         return null;
     }
@@ -624,6 +650,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         return amount;
     }
 
+    @Nullable
     default ItemStack getSpawner(String input) {
         String pi = input.toLowerCase(), type = null;
         if(pi.equals("mysterymobspawner")) {
@@ -643,7 +670,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
             if(is != null) {
                 return is;
             } else {
-                CONSOLE.sendMessage("[RandomPackage] SilkSpawners or EpicSpawners is required to use this feature!");
+                sendConsoleErrorMessage("UVersionableSpigot", "SilkSpawners or EpicSpawners is required to use this feature!");
             }
         }
         return null;
@@ -676,10 +703,10 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
                         location.getWorld().playSound(location, sound, v, pp);
                     }
                 } else {
-                    sendConsoleMessage("&cERROR! Invalid sound name: &f" + s + "&c! Try using the actual sound name for your Server version! (" + VERSION + ")");
+                    sendConsoleErrorMessage("UVersionableSpigot", "Invalid sound name: &f" + s + "&c! Try using the actual sound name for your Server version! (" + VERSION + ")");
                 }
             } catch (Exception e) {
-                sendConsoleMessage("&cERROR! Invalid sound name: &f" + s + "&c! Try using the actual sound name for your Server version! (" + VERSION + ")");
+                sendConsoleErrorMessage("UVersionableSpigot", "Invalid sound name: &f" + s + "&c! Try using the actual sound name for your Server version! (" + VERSION + ")");
             }
         }
     }
@@ -689,8 +716,8 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         final List<Location> locations = new ArrayList<>();
         final int chunk_x = chunk.getX() * 16, chunk_z = chunk.getZ() * 16;
         final World world = chunk.getWorld();
-        for(int x = chunk_x; x < chunk_x+16; x++) {
-            for(int z = chunk_z; z < chunk_z+16; z++) {
+        for(int x = chunk_x; x < chunk_x + 16; x++) {
+            for(int z = chunk_z; z < chunk_z + 16; z++) {
                 locations.add(new Location(world, x, 0, z));
             }
         }
@@ -699,7 +726,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
     @NotNull
     default List<Player> getWorldPlayers(@NotNull Location location) {
         final World world = location.getWorld();
-        return world != null ? world.getPlayers() : new ArrayList<>();
+        return world != null ? world.getPlayers() : List.of();
     }
     @NotNull
     default ItemStack getItemInHand(@NotNull LivingEntity entity) {

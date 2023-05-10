@@ -49,7 +49,7 @@
   "regular loot size": 3,
   "regular loot": [
     "customboss:TREASURE_GOBLIN;amount=3",
-    "blackscroll:REGULAR;amount=5",
+    "black_scroll:REGULAR;amount=5",
     "fallenhero:GKIT_VALENTINES;amount=3",
     "mysterymobspawner;amount=3",
     "raritygem:SOUL:7500",

@@ -9,7 +9,7 @@ import java.util.List;
 public interface TransmogScroll extends Scroll, Applyable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
-        return new String[] { "transmogscroll" };
+        return new String[] { "transmog_scroll" };
     }
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         TransmogScroll t = getTransmogScroll(originalInput.contains(":") ? originalInput.split(":")[1] : "REGULAR");

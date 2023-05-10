@@ -84,7 +84,7 @@ white scrolls:
 #
 holy scrolls:
   WHITE:
-    required scroll: "whitescroll:REGULAR"
+    required scroll: "white_scroll:REGULAR"
     removes required after application: true
     # When a player dies with this on an item, this is the chance that the item isn't lost
     chance of not losing: 100
@@ -110,7 +110,7 @@ holy scrolls:
       - LEGGINGS
       - BOOTS
   WATER:
-    required scroll: "holyscroll:WHITE"
+    required scroll: "holy_scroll:WHITE"
 #
 randomization scrolls:
   sounds:

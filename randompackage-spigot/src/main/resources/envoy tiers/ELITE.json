@@ -30,7 +30,7 @@
   },
   "rewards": [
     "raritybook:ELITE;amount=1-2;chance=50",
-    "randomizationscroll:ELITE;chance=50",
+    "randomization_scroll:ELITE;chance=50",
     "soultracker:ELITE;chance=50",
     "spaceflare:ELITE;chance=50",
     "spacechest:ELITE;chance=50",

@@ -32,7 +32,7 @@
   "rewards": [
     "Old Christmas Cookies",
     "title:199||title:200",
-    "transmogscroll;amount=2-5",
+    "transmog_scroll:REGULAR;amount=2-5",
     "itemlorecrystal;amount=2-5",
     "raritybook:HEROIC",
     "customarmor:PHANTOM||customarmor:YETI",

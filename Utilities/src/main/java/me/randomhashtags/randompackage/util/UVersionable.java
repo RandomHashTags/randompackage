@@ -39,6 +39,7 @@ public interface UVersionable extends RomanNumerals, DefaultFileGeneration {
     }
 
     void sendConsoleMessage(String message);
+    void sendConsoleErrorMessage(@NotNull String sender, String message);
 
     default String formatBigDecimal(BigDecimal b) {
         return formatNumber(b, false);

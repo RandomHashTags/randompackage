@@ -33,7 +33,7 @@
     "2018 Patch Notes",
     "title:197||title:198",
     "maxhomeincrease;amount=5",
-    "randomizationscroll:GODLY;amount=1-4",
+    "randomization_scroll:GODLY;amount=1-4",
     "customarmor:YETI",
     "servercrate;amount=1-2",
     "raritybook:HEROIC;amount=1-2",

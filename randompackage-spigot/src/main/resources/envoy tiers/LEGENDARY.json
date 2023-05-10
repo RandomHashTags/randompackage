@@ -30,7 +30,7 @@
   },
   "rewards": [
     "raritybook:LEGENDARY;amount=1-2;chance=50",
-    "randomizationscroll:LEGENDARY;chance=50",
+    "randomization_scroll:LEGENDARY;chance=50",
     "spaceflare:LEGENDARY;chance=50",
     "spacechest:LEGENDARY;chance=50",
     "rarityfireball:LEGENDARY;chance=50",

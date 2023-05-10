@@ -36,8 +36,8 @@
     "fallenhero:GKIT_ARCANE",
     "fallenhero:GKIT_DIABLO",
     "rarityfireball:ULTIMATE;amount=15",
-    "whitescroll;amount=2",
-    "blackscroll:REGULAR:90;amount=3"
+    "white_scroll:REGULAR;amount=2",
+    "black_scroll:REGULAR:90;amount=3"
   ],
   "bonus": [
     "blazespawner",

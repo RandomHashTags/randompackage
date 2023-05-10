@@ -384,7 +384,7 @@ public enum Scrolls implements RPFeatureSpigot {
 
             final RandomizationScroll randomizationscroll = valueOfRandomizationScroll(cursor);
             final BlackScroll blackscroll = randomizationscroll == null ? valueOfBlackScroll(cursor) : null;
-            final TransmogScroll transmogscroll = blackscroll == null ? valueOfTransmogScroll(cursor) : null;
+            final TransmogScroll transmog_scroll = blackscroll == null ? valueOfTransmogScroll(cursor) : null;
             final WhiteScroll whitescroll = valueOfWhiteScroll(cursor);
             if(blackscroll != null) {
                 final boolean hasMeta = current.hasItemMeta() && itemMeta.hasLore();
@@ -407,8 +407,8 @@ public enum Scrolls implements RPFeatureSpigot {
                 if(!applyRandomizationScroll(player, current, randomizationscroll)) {
                     return;
                 }
-            } else if(transmogscroll != null) {
-                if(!applyTransmogScroll(player, current, transmogscroll)) {
+            } else if(transmog_scroll != null) {
+                if(!applyTransmogScroll(player, current, transmog_scroll)) {
                     return;
                 }
             } else if(whitescroll != null) {

@@ -33,12 +33,12 @@
     "New Years Resolution",
     "2017",
     "title:104||title:171",
-    "transmogscroll;amount=2-3",
+    "transmog_scroll:REGULAR;amount=2-3",
     "spaceflare:GODLY",
     "fallenherogem:GKIT",
     "factionxpbooster:5.0:600||factionmcmmobooster:5.0:600",
-    "whitescroll;amount=2-3",
-    "blackscroll:REGULAR:90;amount=3-5"
+    "white_scroll:REGULAR;amount=2-3",
+    "black_scroll:REGULAR:90;amount=3-5"
   ],
   "bonus": [
     "customboss:BROOD_MOTHER;amount=2",

@@ -137,7 +137,7 @@
       "raritybook:UNIQUE",
       "soultracker:UNIQUE",
       "soultracker:SIMPLE",
-      "randomizationscroll:UNIQUE"
+      "randomization_scroll:UNIQUE"
     ],
     "ULTIMATE": [
       "pigspawner",
@@ -151,7 +151,7 @@
       "raritybook:UNIQUE",
       "soultracker:UNIQUE",
       "soultracker:SIMPLE",
-      "randomizationscroll:UNIQUE"
+      "randomization_scroll:UNIQUE"
     ],
     "ELITE": [
       "pigspawner",
@@ -165,7 +165,7 @@
       "raritybook:UNIQUE",
       "soultracker:UNIQUE",
       "soultracker:SIMPLE",
-      "randomizationscroll:UNIQUE"
+      "randomization_scroll:UNIQUE"
     ],
     "UNIQUE": [
       "pigspawner",
@@ -179,7 +179,7 @@
       "raritybook:UNIQUE",
       "soultracker:UNIQUE",
       "soultracker:SIMPLE",
-      "randomizationscroll:UNIQUE"
+      "randomization_scroll:UNIQUE"
     ],
     "SIMPLE": [
       "pigspawner",
@@ -193,7 +193,7 @@
       "raritybook:UNIQUE",
       "soultracker:UNIQUE",
       "soultracker:SIMPLE",
-      "randomizationscroll:UNIQUE"
+      "randomization_scroll:UNIQUE"
     ]
   }
 }

@@ -57,11 +57,11 @@
     }
   },
   "rewards": [
-    "whitescroll:REGULAR;amount=1-3",
-    "whitescroll:HOLY",
-    "blackscroll:REGULAR;amount=1-3",
-    "blackscroll:HEROIC",
-    "transmogscroll:REGULAR;amount=1-3",
+    "white_scroll:REGULAR;amount=1-3",
+    "white_scroll:HOLY",
+    "black_scroll:REGULAR;amount=1-3",
+    "black_scroll:HEROIC",
+    "transmog_scroll:REGULAR;amount=1-3",
     "itemnametag;amount=1-3",
     "customexplosion:TNT_GIGANTIC;amount=8-16",
     "customexplosion:TNT_LETHAL;amount=8-16",
