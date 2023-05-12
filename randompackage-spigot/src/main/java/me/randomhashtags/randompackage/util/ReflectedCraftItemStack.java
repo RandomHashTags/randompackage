@@ -9,8 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public final class ReflectedCraftItemStack {
     private static ReflectedCraftItemStack INSTANCE;
@@ -29,7 +28,7 @@ public final class ReflectedCraftItemStack {
                 if(!SENT_ERROR) {
                     SENT_ERROR = true;
                     e.printStackTrace();
-                    RandomPackageAPI.INSTANCE.sendConsoleMessage("&cFailed to find craftbukkit version, some features will not work properly!");
+                    RandomPackageAPI.INSTANCE.sendConsoleErrorMessage("ReflectedCraftItemStack", "Failed to find CraftBukkit version, some features will not work properly!");
                 }
             }
         }
@@ -66,89 +65,59 @@ public final class ReflectedCraftItemStack {
     }
 
     @NotNull public final String version;
-    @NotNull public final Class<?> clazz;
-    @NotNull public final Class<?> net_class;
-    @NotNull public final Method as_nms_copy_function;
-    @NotNull public final Method as_craft_mirror_function;
-    @NotNull public final Class<?> tag_compound_class;
+    @NotNull private final Method as_nms_copy_function;
+    @NotNull private final Method as_craft_mirror_function;
+    @NotNull private final Class<?> tag_compound_class;
     @NotNull public final Constructor<?> tag_compound_constructor;
-    @NotNull public final Method tag_compound_remove_function, tag_compound_set_string_function, tag_compound_to_string_function, tag_compound_has_key_function, tag_compound_get_string_function;
-    @NotNull public final Method get_item_meta_function, has_tag_function, get_tag_function, save_function;
+    @NotNull private final Method tag_compound_remove_function, tag_compound_set_string_function, tag_compound_to_string_function, tag_compound_has_key_function, tag_compound_get_string_function;
+    @NotNull private final Method get_item_meta_function, has_tag_function, get_tag_function, save_function;
 
     private ReflectedCraftItemStack(@NotNull ClassLoader class_loader, @NotNull String version) throws Exception {
         this.version = version;
-        clazz = Class.forName("org.bukkit.craftbukkit." + version + ".inventory.CraftItemStack", false, class_loader);
+        final Class<?> clazz = Class.forName("org.bukkit.craftbukkit." + version + ".inventory.CraftItemStack", false, class_loader);
         as_nms_copy_function = clazz.getMethod("asNMSCopy", ItemStack.class);
-        Class<?> net_class;
-        try {
-            net_class = Class.forName("net.minecraft.server." + version + ".ItemStack", false, class_loader);
-        } catch (Exception e) {
-            net_class = Class.forName( "net.minecraft.world.item.ItemStack", false, class_loader);
-        }
-        this.net_class = net_class;
+        final Class<?> net_class = parse_class("ItemStack", class_loader, List.of("net.minecraft.server." + version + ".ItemStack", "net.minecraft.world.item.ItemStack"));
         as_craft_mirror_function = clazz.getMethod("asCraftMirror", net_class);
 
-        Class<?> tag_compound_class;
-        try {
-            tag_compound_class = Class.forName("net.minecraft.server." + version + ".NBTTagCompound", false, class_loader);
-        } catch (Exception ignored) {
-            tag_compound_class = Class.forName("net.minecraft.nbt.NBTTagCompound", false, class_loader);
-        }
-        this.tag_compound_class = tag_compound_class;
+        tag_compound_class = parse_class("NBTTagCompound", class_loader, List.of("net.minecraft.server." + version + ".NBTTagCompound", "net.minecraft.nbt.NBTTagCompound"));
         tag_compound_constructor = tag_compound_class.getConstructor();
         tag_compound_to_string_function = tag_compound_class.getMethod("toString");
 
-        Method tag_compound_remove_function, tag_compound_set_string_function;
-        try {
-            tag_compound_remove_function = tag_compound_class.getMethod("remove", String.class);
-            tag_compound_set_string_function = tag_compound_class.getMethod("setString", String.class, String.class);
-        } catch (Exception ignored) {
-            tag_compound_remove_function = tag_compound_class.getMethod("r", String.class);
-            tag_compound_set_string_function = tag_compound_class.getMethod("a", String.class, String.class);
-        }
-        this.tag_compound_remove_function = tag_compound_remove_function;
-        this.tag_compound_set_string_function = tag_compound_set_string_function;
+        tag_compound_remove_function = parse_method("remove", tag_compound_class, List.of("r"), String.class);
+        tag_compound_set_string_function = parse_method("setString", tag_compound_class, List.of("r"), String.class, String.class);
 
         get_item_meta_function = clazz.getMethod("getItemMeta");
-        Method has_tag_function;
-        try {
-            has_tag_function = net_class.getMethod("hasTag");
-        } catch (Exception ignored) {
-            has_tag_function = net_class.getMethod("t");
-        }
-        this.has_tag_function = has_tag_function;
+        has_tag_function = parse_method("hasTag", net_class, List.of("t"));
 
-        Method get_tag_function;
-        try {
-            get_tag_function = net_class.getMethod("getTag");
-        } catch (Exception ignored) {
-            get_tag_function = net_class.getMethod("u");
-        }
-        this.get_tag_function = get_tag_function;
+        get_tag_function = parse_method("getTag", net_class, List.of("u"));
+        tag_compound_has_key_function = parse_method("hasKey", tag_compound_class, List.of("e"), String.class);
+        tag_compound_get_string_function = parse_method("getString", tag_compound_class, List.of("l"), String.class);
+        save_function = parse_method("save", net_class, List.of("b"), tag_compound_class);
+    }
 
-        Method tag_compound_has_key_function;
-        try {
-            tag_compound_has_key_function = tag_compound_class.getMethod("hasKey", String.class);
-        } catch (Exception ignored) {
-            tag_compound_has_key_function = tag_compound_class.getMethod("e", String.class);
+    @Nullable
+    private Class<?> parse_class(@NotNull String type, @NotNull ClassLoader loader, List<String> aliases) {
+        for(String name : aliases) {
+            try {
+                return Class.forName(name, false, loader);
+            } catch (Exception ignored) {
+            }
         }
-        this.tag_compound_has_key_function = tag_compound_has_key_function;
+        return null;
+    }
 
-        Method tag_compound_get_string_function;
-        try {
-            tag_compound_get_string_function = tag_compound_class.getMethod("getString", String.class);
-        } catch (Exception ignored) {
-            tag_compound_get_string_function = tag_compound_class.getMethod("l", String.class);
+    @Nullable
+    private Method parse_method(@NotNull String type, @NotNull Class<?> parent_class, @NotNull List<String> aliases, Class<?>...parameters) {
+        final List<String> names = new ArrayList<>(Collections.singletonList(type));
+        names.addAll(aliases);
+        for(String name : names) {
+            try {
+                return parent_class.getMethod(name, parameters);
+            } catch (Exception ignored) {
+            }
         }
-        this.tag_compound_get_string_function = tag_compound_get_string_function;
-
-        Method save_function;
-        try {
-            save_function = net_class.getMethod("save", tag_compound_class);
-        } catch (Exception ignored) {
-            save_function = net_class.getMethod("b", tag_compound_class);
-        }
-        this.save_function = save_function;
+        RandomPackageAPI.INSTANCE.sendConsoleErrorMessage("ReflectedCraftItemStack", "Failed to find method via reflection with name \"" + type + "\"! Errors will happen!");
+        return null;
     }
 
     @Nullable

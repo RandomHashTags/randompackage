@@ -259,7 +259,7 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 	public void view_prizes(@NotNull Player player) {
 		if(hasPermission(player, GlobalChallengePermission.VIEW_PRIZES, true)) {
 			final HashMap<GlobalChallengePrize, Integer> prizes = FileRPPlayer.get(player.getUniqueId()).getGlobalChallengeData().getPrizes();
-			int size = (prizes.size()/9)*9;
+			int size = (prizes.size() / 9) * 9;
 			size = size == 0 ? 9 : Math.min(size, 54);
 			player.openInventory(Bukkit.createInventory(player, size, claim_prizes.getTitle()));
 			final Inventory top = player.getOpenInventory().getTopInventory();
