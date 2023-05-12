@@ -103,6 +103,7 @@ public final class ReflectedCraftItemStack {
             } catch (Exception ignored) {
             }
         }
+        RandomPackageAPI.INSTANCE.sendConsoleErrorMessage("ReflectedCraftItemStack", "Failed to find class via reflection with name \"" + type + "\"! Errors will happen!");
         return null;
     }
 
