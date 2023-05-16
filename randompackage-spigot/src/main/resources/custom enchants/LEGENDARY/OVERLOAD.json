@@ -11,7 +11,7 @@
   "max level": 3,
   "applies to" : ["helmet", "chestplate", "leggings", "boots"],
   "alchemist upgrade costs": [7000, 9500],
-  "tinkerer": "143:154:165",
+  "tinkerer": [143, 154, 165],
   "attributes": [
     "PlayerJoin;PlayerAddPotionEffect=health_boost:level-1:99999:true",
     "PlayerQuit;PlayerRemovePotionEffect=health_boost:false",

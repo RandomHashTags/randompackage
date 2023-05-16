@@ -13,7 +13,7 @@
   "max level": 4,
   "applies to" : ["_axe"],
   "alchemist upgrade costs": [6000, 7000, 8000],
-  "tinkerer": "82:97:112:127",
+  "tinkerer": [82, 97, 112, 127],
   "attributes": [
     "PvAny;VictimIsPlayer=true;chance=6*level;VictimIsHolding=_AXE;SetDamage=dmg*(1.10+(0.05*level))"
   ]

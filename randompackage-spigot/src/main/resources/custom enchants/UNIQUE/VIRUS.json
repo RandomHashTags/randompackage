@@ -14,7 +14,7 @@
   "max level": 4,
   "applies to" : ["bow"],
   "alchemist upgrade costs": [2450, 2650, 2850],
-  "tinkerer": "71:80:89:98",
+  "tinkerer": [71, 80, 89, 98],
   "attributes": [
     "ProjectileHit;ProjectileIsType=ARROW;chance=4*level;VictimAddToList=VIRUS;Wait=level*20*3"
   ]

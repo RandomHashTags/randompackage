@@ -16,7 +16,7 @@
   "applies to" : ["sword"],
   "requires": "Block;3",
   "alchemist upgrade costs": [0, 0],
-  "tinkerer": "",
+  "tinkerer": [],
   "attribute": [
     "isDamaged;chance=12*level;VictimIsBlocking=true;SetDamage=dmg*(1-(level*0.25))",
     "isDamaged;didProc;chance=20*level;DamagerDamage=dmg"

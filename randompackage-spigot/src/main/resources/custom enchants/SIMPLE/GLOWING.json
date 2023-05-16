@@ -10,7 +10,7 @@
   },
   "max level": 1,
   "applies to" : ["helmet"],
-  "tinkerer": "84",
+  "tinkerer": [84],
   "attributes": [
     "PlayerJoin;PlayerAddPotionEffect=night_vision:level-1:99999:true",
     "PlayerQuit;PlayerRemovePotionEffect=night_vision:false",

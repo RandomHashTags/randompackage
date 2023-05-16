@@ -11,7 +11,7 @@
   "max level": 4,
   "applies to" : ["sword"],
   "alchemist upgrade costs": [9000, 11000, 14000],
-  "tinkerer": "121:144:167:190",
+  "tinkerer": [121, 144, 167, 190],
   "attributes": [
     "EntityDeath;SetDroppedExp=3+(xp*level)"
   ]

@@ -12,7 +12,7 @@
   "max level": 5,
   "applies to" : ["pickaxe"],
   "alchemist upgrade costs": [1250, 1500, 1750, 2000],
-  "tinkerer": "111:123:135:147:159",
+  "tinkerer": [111, 123, 135, 147, 159],
   "attributes": [
     "PlayerInteract;chance=6*level;HitBlock=OBSIDIAN;PlayerCanBreakHitBlock;BreakHitBlock"
   ]

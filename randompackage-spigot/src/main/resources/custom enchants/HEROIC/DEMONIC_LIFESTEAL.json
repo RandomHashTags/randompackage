@@ -15,7 +15,7 @@
   "max level": 3,
   "applies to" : ["sword"],
   "alchemist upgrade costs": [0, 0],
-  "tinkerer": "",
+  "tinkerer": [],
   "requires": "Lifesteal;3",
   "attributes": [
     "PvAny;chance=3*level;DamagerHeal=4;VictimSetHealth=VictimHealth-2;DamagerSendMessage=&d&l** DEMONIC LIFESTEAL **"

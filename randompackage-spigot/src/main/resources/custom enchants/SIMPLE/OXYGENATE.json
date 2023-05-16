@@ -11,7 +11,7 @@
   },
   "max level": 1,
   "applies to" : ["pickaxe"],
-  "tinkerer": "73",
+  "tinkerer": [73],
   "attributes": [
     "BlockBreak;chance=70+(5*level);PlayerIsUnderwater;PlayerSetAir=air+40"
   ]

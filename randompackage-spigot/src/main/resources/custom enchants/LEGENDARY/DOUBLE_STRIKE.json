@@ -14,7 +14,7 @@
   "max level": 3,
   "applies to" : ["sword"],
   "alchemist upgrade costs": [3000, 7000],
-  "tinkerer": "51:66:81",
+  "tinkerer": [51, 66, 81],
   "attributes": [
     "PvAny;chance=8+(2*level);DamagerProcEnchants;DamagerSendMessage=&6&l* DOUBLE STRIKE *"
   ]

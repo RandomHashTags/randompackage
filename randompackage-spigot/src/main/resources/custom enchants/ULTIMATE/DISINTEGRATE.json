@@ -13,7 +13,7 @@
   "max level": 4,
   "applies to" : ["sword"],
   "alchemist upgrade costs": [6000, 7000, 8000],
-  "tinkerer": "94:108:122:136",
+  "tinkerer": [94, 108, 122, 136],
   "attributes": [
     "PvAny;VictimIsType=PLAYER;chance=4*level;VictimSetDurability=all:durability+1"
   ]

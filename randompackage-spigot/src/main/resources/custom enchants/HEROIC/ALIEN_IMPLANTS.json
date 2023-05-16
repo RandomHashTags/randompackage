@@ -17,7 +17,7 @@
   "applies to" : ["helmet"],
   "requires": "Implants;3",
   "alchemist upgrade costs": [0, 0],
-  "tinkerer": "",
+  "tinkerer": [],
   "attributes": [
     ""
   ]

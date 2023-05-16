@@ -10,7 +10,7 @@
   },
   "max level": 5,
   "applies to" : ["sword", "_axe"],
-  "tinkerer": "61:70:79:88:97",
+  "tinkerer": [61, 70, 79, 88, 97],
   "alchemist upgrade costs": [1500, 2000, 2500, 3000],
   "attributes": [
     "PvAny;chance=50+(5*level);VictimSetVelocity=velocityXOf(VICTIM)*(1+(.2*level)):velocityYOf(VICTIM)*(1+(.2*level)):velocityZOf(VICTIM)*(1+(.2*level))}"

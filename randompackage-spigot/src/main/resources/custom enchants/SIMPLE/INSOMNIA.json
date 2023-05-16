@@ -12,7 +12,7 @@
   "max level": 7,
   "applies to" : ["sword"],
   "alchemist upgrade costs": [1000, 1500, 2000, 2500, 3000, 3500],
-  "tinkerer": "52:63:74:85:96:107:118",
+  "tinkerer": [52, 63, 74, 85, 96, 107, 118],
   "attributes": [
     "PvAny;chance=4+(2*level);VictimAddPotionEffect=slowness:level-1:40*level;VictimAddPotionEffect=mining_fatigue:level-1:40*level;VictimAddPotionEffect=confusion:level-1:20+(40*level)"
   ]

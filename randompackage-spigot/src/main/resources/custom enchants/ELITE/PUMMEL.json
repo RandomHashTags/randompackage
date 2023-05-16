@@ -12,7 +12,7 @@
   "max level": 3,
   "applies to" : ["_axe"],
   "alchemist upgrade costs": [2600, 3300],
-  "tinkerer": "59:70:81",
+  "tinkerer": [59, 70, 81],
   "attributes": [
     "PvAny;chance=11+(3*level);NearbyDamagerEnemies[7+level]AddPotionEffect=slowness:level:20*(2*level);DamagerSendMessage=&b&l** PUMMEL **"
   ]

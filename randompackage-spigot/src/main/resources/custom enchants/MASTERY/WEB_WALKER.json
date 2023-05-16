@@ -16,7 +16,7 @@
   "max level": 1,
   "applies to" : ["boots"],
   "alchemist upgrade costs": [],
-  "tinkerer": "",
+  "tinkerer": [],
   "attributes": [
     ""
   ]

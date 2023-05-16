@@ -12,7 +12,7 @@
   "max level": 6,
   "applies to" : ["sword", "_axe", "bow"],
   "alchemist upgrade costs": [6000, 7000, 8000, 9000, 10000],
-  "tinkerer": "139:151:163:175:187:199",
+  "tinkerer": [139, 151, 163, 175, 187, 199],
   "attributes": [
     "PvAny;DamagerIsInList=PACIFY;Return=false",
     "PvAny;DamagerHasCombo=Rage:false;DamagerAddCombo=Rage:1.0",

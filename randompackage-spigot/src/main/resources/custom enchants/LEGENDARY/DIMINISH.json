@@ -17,7 +17,7 @@
   "max level": 6,
   "applies to" : ["chestplate"],
   "alchemist upgrade costs": [0, 0, 0, 0, 0],
-  "tinkerer": "",
+  "tinkerer": [],
   "attributes": [
     "isDamaged;"
   ]

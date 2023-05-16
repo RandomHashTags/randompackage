@@ -14,7 +14,7 @@
   "max level": 3,
   "applies to" : ["helmet", "chestplate", "leggings", "boots"],
   "alchemist upgrade costs": [6000, 7000],
-  "tinkerer": "89:105:121",
+  "tinkerer": [89, 105, 121],
   "attributes": [
     "DamagedBy(BLOCK_EXPLOSION||ENTITY_EXPLOSION);SetDamage=0;VictimSetDurability=all:durability-1",
     "DamagedBy(BLOCK_EXPLOSION||ENTITY_EXPLOSION);chance=30*level;setVelocity{0:0:0}",

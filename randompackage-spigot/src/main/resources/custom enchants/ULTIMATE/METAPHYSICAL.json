@@ -15,7 +15,7 @@
   "max level": 4,
   "applies to" : ["boots"],
   "alchemist upgrade costs": [3000, 3500, 4000],
-  "tinkerer": "112:134:156:178",
+  "tinkerer": [112, 134, 156, 178],
   "attributes": [
     "CEApplyPotionEffect;chance=level*22;if{enchantIs(Trap||Snare||Pummel)->cancel&&sendMessage{[victim]&8&l** METAPHYSICAL (%ENCHANT% blocked!) **}}"
   ]

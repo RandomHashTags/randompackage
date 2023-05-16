@@ -11,7 +11,7 @@
   "max level": 4,
   "applies to" : ["_axe"],
   "alchemist upgrade costs": [5000, 6000, 7000],
-  "tinkerer": "53:67:81:95",
+  "tinkerer": [53, 67, 81, 95],
   "attributes": [
     "PvAny;chance=2*level;DamagerSendMessage=&e&l**BLESSED**;DamagerRemovePotionEffect=blindness;DamagerRemovePotionEffect=confusion;DamagerRemovePotionEffect=poison;DamagerRemovePotionEffect=slow;DamagerRemovePotionEffect=slow_digging;DamagerRemovePotionEffect=weakness;DamagerRemovePotionEffect=wither"
   ]

@@ -13,7 +13,7 @@
   "max level": 5,
   "applies to" : ["helmet", "chestplate", "leggings", "boots"],
   "alchemist upgrade costs": [5000, 5800, 6600, 7400],
-  "tinkerer": "58:67:76:85:94",
+  "tinkerer": [58, 67, 76, 85, 94],
   "attributes": [
     "isDamaged;chance=Lucky+(3+(4*level));VictimIsSneaking=true;SetCancelled=true;VictimSendMessage=&e*DODGE*"
   ]

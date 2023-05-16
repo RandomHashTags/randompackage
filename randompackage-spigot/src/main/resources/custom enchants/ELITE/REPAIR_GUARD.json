@@ -15,7 +15,7 @@
   "max level": 3,
   "applies to" : ["helmet", "chestplate", "leggings", "boots"],
   "alchemist upgrade costs": [2250, 2750],
-  "tinkerer": "68:82:96",
+  "tinkerer": [68, 82, 96],
   "attributes": [
     "ArmorUnequip;PlayerAddPotionEffect=absorption:level+1:30+(10*level):true"
   ]

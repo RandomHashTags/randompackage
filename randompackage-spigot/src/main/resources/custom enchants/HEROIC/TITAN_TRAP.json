@@ -13,7 +13,7 @@
   "max level": 3,
   "applies to" : ["sword"],
   "alchemist upgrade costs": [0, 0],
-  "tinkerer": "",
+  "tinkerer": [],
   "requires": "Trap;3",
   "attributes": [
     "PvAny;chance=6+(2*level);VictimAddPotionEffect=slowness:level:20+(80*level)"

@@ -12,7 +12,7 @@
   "max level": 1,
   "applies to" : ["pickaxe"],
   "alchemist upgrade costs": [],
-  "tinkerer": "",
+  "tinkerer": [],
   "attributes": [
     ""
   ]

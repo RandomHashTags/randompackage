@@ -16,7 +16,7 @@
   "max level": 3,
   "applies to" : ["_axe"],
   "alchemist upgrade costs": [9000, 16000],
-  "tinkerer": "172:197:222",
+  "tinkerer": [172, 197, 222],
   "attributes": [
     "PvAny;chance=level*5;VictimIsType=PLAYER;DamagerHasActiveRarityGem=SOUL:true;VictimAddToList=SOUL_TRAPPED;Wait=level*4*20;VictimRemoveFromList=SOUL_TRAPPED"
   ]

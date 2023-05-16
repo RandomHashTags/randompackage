@@ -15,7 +15,7 @@
   "max level": 5,
   "applies to" : ["bow"],
   "alchemist upgrade costs": [0, 0, 0, 0],
-  "tinkerer": "",
+  "tinkerer": [],
   "requires": "Sniper;5",
   "attributes": [
     "ProjectileHit;ProjectileIsType=ARROW;chance=40+(5*level);IsHeadshot=true;SetDamage=dmg*(3.5+(random{0:level}*0.2))"

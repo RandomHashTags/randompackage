@@ -13,7 +13,7 @@
   "max level": 4,
   "applies to" : ["bow"],
   "alchemist upgrade costs": [2350, 2500, 2750],
-  "tinkerer": "102:117:131:142",
+  "tinkerer": [102, 117, 131, 142],
   "attributes": [
     "ProjectileHit;ProjectileIsType=ARROW;chance=10+(5*level);replaceBlock{VICTIMX:VICTIMY-1:VICTIMZ:SOUL_SAND:0:60}",
     "ProjectileHit;didProc;chance=30+(5*level);replaceBlock{VICTIMX:VICTIMY:VICTIMZ:WEB:0:60}"

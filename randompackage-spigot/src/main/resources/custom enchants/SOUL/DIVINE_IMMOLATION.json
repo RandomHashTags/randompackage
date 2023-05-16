@@ -16,7 +16,7 @@
   "max level": 4,
   "applies to" : ["sword"],
   "alchemist upgrade costs": [0, 0, 0],
-  "tinkerer": "",
+  "tinkerer": [],
   "attributes": [
     "CustomEnchantTimer;interval=20;PlayerIsInList=SOUL_TRAPPED:false;PlayerHasActiveRarityGem=SOUL:true;PlayerDepleteRarityGem=SOUL:20",
     "PvAny;DamagerIsInList=SOUL_TRAPPED;Return=false",

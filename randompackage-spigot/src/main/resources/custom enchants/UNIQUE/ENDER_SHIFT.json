@@ -11,7 +11,7 @@
   "max level": 3,
   "applies to" : ["helmet"],
   "alchemist upgrade costs": [2500, 3000],
-  "tinkerer": "103:119:135",
+  "tinkerer": [103, 119, 135],
   "attributes": [
     "PvAny;Lucky+15+level;VictimHealthIs<=5+level;VictimAddPotionEffect=speed:level-1:80+(20*level);VictimAddPotionEffect=health_boost:level-1:80+(20*level)"
   ]

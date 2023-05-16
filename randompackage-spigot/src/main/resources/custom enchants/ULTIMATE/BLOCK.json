@@ -12,7 +12,7 @@
   "max level": 3,
   "applies to" : ["sword"],
   "alchemist upgrade costs": [3000, 5000],
-  "tinkerer": "45:54:63",
+  "tinkerer": [45, 54, 63],
   "attributes": [
     "isDamaged;chance=8*level;VictimIsBlocking=true;SetCancelled=true;DamagerDamage=dmg*(1.05*level)"
   ]

@@ -12,7 +12,7 @@
   "max level": 5,
   "applies to" : ["boots"],
   "alchemist upgrade costs": [2000, 3250, 4500, 5750],
-  "tinkerer": "57:66:75:84:93",
+  "tinkerer": [57, 66, 75, 84, 93],
   "attributes": [
     "EntityDamage;Cause=POISON||WITHER;SetCancelled=true",
     "EntityDamage;Cause=POISON||WITHER;chance=7*level;VictimHeal=2"

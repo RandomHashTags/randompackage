@@ -12,7 +12,7 @@
   "max level": 3,
   "applies to" : ["helmet"],
   "alchemist upgrade costs": [3500, 5000],
-  "tinkerer": "79:90:101",
+  "tinkerer": [79, 90, 101],
   "attributes": [
     "CustomEnchantTimer;interval=180;chance=40+(10*level);PlayerHeal=2;PlayerHealHunger=1"
   ]

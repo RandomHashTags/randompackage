@@ -16,7 +16,7 @@
   "applies to" : ["_axe"],
   "requires": "Bleed;6",
   "alchemist upgrade costs": [0, 0],
-  "tinkerer": "",
+  "tinkerer": [],
   "attributes": [
     ""
   ]

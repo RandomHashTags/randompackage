@@ -12,7 +12,7 @@
   "max level": 4,
   "applies to" : ["helmet", "chestplate", "leggings", "boots"],
   "alchemist upgrade costs": [3500, 4000, 4500],
-  "tinkerer": "69:78:87:96",
+  "tinkerer": [69, 78, 87, 96],
   "attributes": [
     "isDamaged;chance=Lucky+4+(2*level);DamagerAddPotionEffect=poison:level-1:40+(40*level)"
   ]

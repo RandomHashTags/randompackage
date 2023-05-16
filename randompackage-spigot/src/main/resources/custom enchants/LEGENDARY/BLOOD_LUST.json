@@ -13,7 +13,7 @@
   "max level": 6,
   "applies to" : ["chestplate"],
   "alchemist upgrade costs": [5700, 6100, 6500, 6900, 7300],
-  "tinkerer": "71:83:95:107:119:131",
+  "tinkerer": [71, 83, 95, 107, 119, 131],
   "attributes": [
     "NearbyEnemyIsDamaged;chance=10+(5*level)"
   ]

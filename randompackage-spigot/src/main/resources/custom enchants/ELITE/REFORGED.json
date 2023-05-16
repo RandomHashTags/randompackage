@@ -12,7 +12,7 @@
   "max level": 10,
   "applies to" : ["sword"],
   "alchemist upgrade costs": [1200, 1600, 2000, 2400, 2800, 3200, 3600, 4000, 4400],
-  "tinkerer": "58:67:76:85:94:103:112:121:130:139",
+  "tinkerer": [58, 67, 76, 85, 94, 103, 112, 121, 130, 139],
   "attributes": [
     "PvAny;chance=20+(4*level);DamagerSetDurability=item:durability-1"
   ]

@@ -13,7 +13,7 @@
   "max level": 4,
   "applies to" : ["_axe"],
   "alchemist upgrade costs": [0, 0, 0],
-  "tinkerer": "",
+  "tinkerer": [],
   "requires": "Cleave;7",
   "attributes": [
     "PvAny;chance=4+(3*level);NearbyVictimEnemies[1.0625*level]Damage=level*2"

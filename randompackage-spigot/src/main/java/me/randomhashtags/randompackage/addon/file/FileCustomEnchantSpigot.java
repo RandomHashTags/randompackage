@@ -33,20 +33,7 @@ public final class FileCustomEnchantSpigot extends RPAddonSpigot implements Cust
         applies_to = parse_list_string_in_json(json, "applies to");
         required_enchant = parse_string_in_json(json, "requires", null);
         alchemist = parse_list_big_decimal_in_json(json, "alchemist upgrade costs", null);
-        final String tinkerer_value = parse_string_in_json(json, "tinkerer", null);
-        if(tinkerer_value != null && !tinkerer_value.isEmpty()) {
-            final String[] tinkerer_values = tinkerer_value.split(":");
-            final BigDecimal[] tinkerer = new BigDecimal[tinkerer_values.length];
-            int i = 0;
-            for (String s : tinkerer_values) {
-                final int integer = Integer.parseInt(s);
-                tinkerer[i] = BigDecimal.valueOf(integer);
-                i++;
-            }
-            this.tinkerer = List.of(tinkerer);
-        } else {
-            tinkerer = null;
-        }
+        tinkerer = parse_list_big_decimal_in_json(json, "tinkerer", null);
         attributes = parse_list_string_in_json(json, "attributes");
         enchant_proc_value = parse_string_in_json(json, "enchant proc value", "0");
         register(isEnabled() ? Feature.CUSTOM_ENCHANT_ENABLED : Feature.CUSTOM_ENCHANT_DISABLED, this);

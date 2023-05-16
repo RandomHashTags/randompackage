@@ -15,7 +15,7 @@
   "max level": 5,
   "applies to" : ["helmet", "chestplate", "leggings", "boots"],
   "alchemist upgrade costs": [0, 0, 0, 0],
-  "tinkerer": "",
+  "tinkerer": [],
   "attributes": [
     "PlayerDeath;PlayerIsAllyEnchantHolder;DistanceBetweenPlayer-EnchantHolder<=100B;EnchantHolderSetHealth=getEnchantHolderMaxHP;EnchantHolderAddPotionEffect=absorption:0:level*20*2"
   ]

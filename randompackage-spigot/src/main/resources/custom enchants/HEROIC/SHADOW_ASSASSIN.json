@@ -17,7 +17,7 @@
   "max level": 4,
   "applies to" : ["sword"],
   "alchemist upgrade costs": [0, 0, 0],
-  "tinkerer": "",
+  "tinkerer": [],
   "requires": "Assassin;5",
   "attributes": [
     "PvAny;"

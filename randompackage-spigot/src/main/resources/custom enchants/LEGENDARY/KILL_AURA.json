@@ -12,7 +12,7 @@
   "max level": 5,
   "applies to" : ["sword"],
   "alchemist upgrade costs": [4000, 5000, 6000, 7000],
-  "tinkerer": "63:75:87:99:111",
+  "tinkerer": [63, 75, 87, 99, 111],
   "attributes": [
     "MobStackDeplete;chance=level*4;depleteStackSize{random{2:4}};PlayerSendMessage=&e&l*** random{2:4}X MOB KILL ***"
   ]

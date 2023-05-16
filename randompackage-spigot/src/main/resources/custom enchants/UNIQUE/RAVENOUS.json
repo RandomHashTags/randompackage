@@ -11,7 +11,7 @@
   "max level": 4,
   "applies to" : ["_axe"],
   "alchemist upgrade costs": [1000, 1500, 2000],
-  "tinkerer": "123:134:145:156",
+  "tinkerer": [123, 134, 145, 156],
   "attributes": [
     "PvAny;chance=12+(2*level);DamagerHealHunger=1"
   ]

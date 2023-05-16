@@ -23,7 +23,7 @@
   "applies to" : ["chestplate"],
   "requires": "Diminish;6",
   "alchemist upgrade costs": [0, 0, 0],
-  "tinkerer": "",
+  "tinkerer": [],
   "attributes": [
     "isDamaged;"
   ]

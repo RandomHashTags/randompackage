@@ -11,7 +11,7 @@
   "max level": 3,
   "applies to" : ["bow"],
   "alchemist upgrade costs": [2500, 2750],
-  "tinkerer": "75:84:93",
+  "tinkerer": [75, 84, 93],
   "attributes": [
     "PvAny;chance=4*level;VictimAddPotionEffect=poison:level-1:40+(40*level)"
   ]
