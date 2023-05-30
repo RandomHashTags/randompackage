@@ -69,7 +69,9 @@ public final class ReflectedCraftItemStack {
     @NotNull private final Method as_craft_mirror_function;
     @NotNull private final Class<?> tag_compound_class;
     @NotNull public final Constructor<?> tag_compound_constructor;
-    @NotNull private final Method tag_compound_remove_function, tag_compound_set_string_function, tag_compound_to_string_function, tag_compound_has_key_function, tag_compound_get_string_function;
+    @NotNull private final Method tag_compound_remove_function;
+    @NotNull public final Method tag_compound_set_string_function;
+    @NotNull private final Method tag_compound_to_string_function, tag_compound_has_key_function, tag_compound_get_string_function;
     @NotNull private final Method get_item_meta_function, has_tag_function, get_tag_function, save_function;
 
     private ReflectedCraftItemStack(@NotNull ClassLoader class_loader, @NotNull String version) throws Exception {
