@@ -209,6 +209,7 @@ public enum CustomArmor implements EventAttributes, RPItemStack {
 	public boolean hasCustomDurability(@NotNull ItemStack is) {
 		return getRPItemStackValue(is, "CustomDurability") != null;
 	}
+	@NotNull
 	public ItemStack setCustomDurability(@NotNull ItemStack is, int maxDurability, int armorValueORbonusAttackDmg) {
 		if(!hasCustomDurability(is)) {
 			final String max = Integer.toString(maxDurability), value = Integer.toString(armorValueORbonusAttackDmg);

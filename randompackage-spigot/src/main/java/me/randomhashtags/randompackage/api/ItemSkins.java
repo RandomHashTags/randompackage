@@ -99,6 +99,7 @@ public enum ItemSkins implements RPFeatureSpigot, CommandExecutor, RPItemStack {
         cache.put(skin, is);
         return is;
     }
+    @Nullable
     public String getItemSkinMaterialString(@NotNull ItemSkin skin) {
         return materials.get(skin.getMaterial());
     }

@@ -19,6 +19,7 @@ public interface CustomBoss extends RPEntity, Scoreboardable, Spawnable, GivedpI
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "customboss" };
     }
+    @Nullable
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final CustomBoss boss = getCustomBoss(originalInput.split(":")[1]);
         return boss != null ? boss.getSpawnItem() : null;

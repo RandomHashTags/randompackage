@@ -703,10 +703,10 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
                         location.getWorld().playSound(location, sound, v, pp);
                     }
                 } else {
-                    sendConsoleErrorMessage("UVersionableSpigot", "Invalid sound name: &f" + s + "&c! Try using the actual sound name for your Server version! (" + VERSION + ")");
+                    sendConsoleErrorMessage("UVersionableSpigot", "Invalid sound name: &f" + s + "&c! Try using the actual sound name for your Server version! (" + Bukkit.getVersion() + ")");
                 }
             } catch (Exception e) {
-                sendConsoleErrorMessage("UVersionableSpigot", "Invalid sound name: &f" + s + "&c! Try using the actual sound name for your Server version! (" + VERSION + ")");
+                sendConsoleErrorMessage("UVersionableSpigot", "Invalid sound name: &f" + s + "&c! Try using the actual sound name for your Server version! (" + Bukkit.getVersion() + ")");
             }
         }
     }

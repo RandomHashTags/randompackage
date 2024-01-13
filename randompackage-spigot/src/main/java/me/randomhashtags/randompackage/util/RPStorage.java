@@ -52,6 +52,7 @@ public interface RPStorage extends RPValues {
     default Identifiable get(Feature feature, @NotNull String identifier) {
         return FEATURES.containsKey(feature) ? FEATURES.get(feature).getOrDefault(identifier, null) : null;
     }
+    @NotNull
     default LinkedHashMap<String, Identifiable> getAll(@NotNull Feature feature) {
         return FEATURES.getOrDefault(feature, new LinkedHashMap<>());
     }

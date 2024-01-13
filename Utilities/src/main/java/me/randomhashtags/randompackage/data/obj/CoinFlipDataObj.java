@@ -9,7 +9,7 @@ public final class CoinFlipDataObj implements CoinFlipData {
     private boolean notifications;
     private BigDecimal wins, losses, wonCash, lostCash, taxesPaid;
 
-    public CoinFlipDataObj(boolean notifications, BigDecimal wins, BigDecimal losses, BigDecimal wonCash, BigDecimal lostCash, BigDecimal taxesPaid) {
+    public CoinFlipDataObj(boolean notifications, @NotNull BigDecimal wins, @NotNull BigDecimal losses, @NotNull BigDecimal wonCash, @NotNull BigDecimal lostCash, @NotNull BigDecimal taxesPaid) {
         this.notifications = notifications;
         this.wins = wins;
         this.losses = losses;
@@ -28,7 +28,7 @@ public final class CoinFlipDataObj implements CoinFlipData {
     }
 
     @Override
-    public BigDecimal getWins() {
+    public @NotNull BigDecimal getWins() {
         return wins;
     }
     @Override
@@ -37,7 +37,7 @@ public final class CoinFlipDataObj implements CoinFlipData {
     }
 
     @Override
-    public BigDecimal getLosses() {
+    public @NotNull BigDecimal getLosses() {
         return losses;
     }
     @Override
@@ -46,7 +46,7 @@ public final class CoinFlipDataObj implements CoinFlipData {
     }
 
     @Override
-    public BigDecimal getWonCash() {
+    public @NotNull BigDecimal getWonCash() {
         return wonCash;
     }
     @Override
@@ -55,7 +55,7 @@ public final class CoinFlipDataObj implements CoinFlipData {
     }
 
     @Override
-    public BigDecimal getLostCash() {
+    public @NotNull BigDecimal getLostCash() {
         return lostCash;
     }
     @Override
@@ -64,7 +64,7 @@ public final class CoinFlipDataObj implements CoinFlipData {
     }
 
     @Override
-    public BigDecimal getTaxesPaid() {
+    public @NotNull BigDecimal getTaxesPaid() {
         return taxesPaid;
     }
     @Override

@@ -24,6 +24,7 @@ public final class EquippedCustomEnchants implements Versionable {
         enchants = new LinkedHashMap<>();
     }
 
+    @NotNull
     public Player getPlayer() {
         return player;
     }
@@ -31,9 +32,12 @@ public final class EquippedCustomEnchants implements Versionable {
     public void clear() {
         enchants.clear();
     }
+
+    @NotNull
     public LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchantSpigot, Integer>> getInfo() {
         return getInfo(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.HAND);
     }
+    @NotNull
     public LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchantSpigot, Integer>> getInfo(EquipmentSlot...slots) {
         final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchantSpigot, Integer>> map = new LinkedHashMap<>();
         for(EquipmentSlot slot : slots) {
@@ -45,13 +49,16 @@ public final class EquippedCustomEnchants implements Versionable {
         return map;
     }
 
+    @NotNull
     public LinkedHashMap<EquipmentSlot, LinkedHashMap<CustomEnchantSpigot, Integer>> getEnchants() {
         return enchants;
     }
 
+    @Nullable
     public ItemStack getItem(EquipmentSlot slot) {
         return getItem(slot, false);
     }
+    @Nullable
     public ItemStack getItem(EquipmentSlot slot, boolean getEventItem) {
         return getItemInSlot(slot, getEventItem);
     }
@@ -65,33 +72,28 @@ public final class EquippedCustomEnchants implements Versionable {
         return enchants.getOrDefault(slot, null);
     }
 
-    public void update(EquipmentSlot slot, ItemStack withItem) {
-        if(slot != null) {
-            enchants.remove(slot);
-            if(withItem != null) {
-                enchants.put(slot, CustomEnchants.INSTANCE.getEnchantsOnItem(withItem));
-            }
+    public void update(@NotNull EquipmentSlot slot, @Nullable ItemStack withItem) {
+        enchants.remove(slot);
+        if(withItem != null) {
+            enchants.put(slot, CustomEnchants.INSTANCE.getEnchantsOnItem(withItem));
         }
     }
-    public void update(EquipmentSlot...slots) {
+    public void update(@NotNull EquipmentSlot...slots) {
         for(EquipmentSlot slot : slots) {
-            if(slot != null) {
-                update(slot);
-            }
+            update(slot);
         }
     }
-    private void update(EquipmentSlot slot) {
+    private void update(@NotNull EquipmentSlot slot) {
         final ItemStack is = getItemInSlot(slot);
         update(slot, is);
     }
 
+    @Nullable
     private ItemStack getItemInSlot(EquipmentSlot slot) {
         return getItemInSlot(slot, false);
     }
-    private ItemStack getItemInSlot(EquipmentSlot slot, boolean getEventItem) {
-        if(slot == null) {
-            return null;
-        }
+    @Nullable
+    private ItemStack getItemInSlot(@NotNull EquipmentSlot slot, boolean getEventItem) {
         if(getEventItem && EVENTS.containsKey(player)) {
             return EVENTS.get(player).getItem();
         }

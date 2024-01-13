@@ -7,14 +7,14 @@ import java.math.BigDecimal;
 public interface CoinFlipData {
     boolean receivesNotifications();
     void setReceivesNotifications(boolean notifications);
-    BigDecimal getWins();
+    @NotNull BigDecimal getWins();
     void setWins(@NotNull BigDecimal wins);
-    BigDecimal getLosses();
+    @NotNull BigDecimal getLosses();
     void setLosses(@NotNull BigDecimal losses);
-    BigDecimal getWonCash();
+    @NotNull BigDecimal getWonCash();
     void setWonCash(@NotNull BigDecimal wonCash);
-    BigDecimal getLostCash();
+    @NotNull BigDecimal getLostCash();
     void setLostCash(@NotNull BigDecimal lostCash);
-    BigDecimal getTaxesPaid();
+    @NotNull BigDecimal getTaxesPaid();
     void setTaxesPaid(@NotNull BigDecimal taxesPaid);
 }

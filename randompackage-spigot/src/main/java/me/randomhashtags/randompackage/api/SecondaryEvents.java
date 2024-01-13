@@ -194,14 +194,16 @@ public enum SecondaryEvents implements RPFeatureSpigot, CommandExecutor {
         sendStringListMessage(player, getStringList(config, "bless.msg"), null);
     }
     public void confirm(@NotNull Player opener, @NotNull RPPlayer target) {
-        final List<ItemStack> u = target.getUnclaimedPurchases();
-        final int size = ((u.size()+9)/9)*9;
-        opener.openInventory(Bukkit.createInventory(opener, size, confirm));
-        final Inventory top = opener.getOpenInventory().getTopInventory();
-        for(ItemStack is : target.getUnclaimedPurchases()) {
-            top.setItem(top.firstEmpty(), is);
+        final List<ItemStack> unclaimed_purchases = target.getUnclaimedPurchases();
+        if(unclaimed_purchases != null) {
+            final int size = ((unclaimed_purchases.size()+9)/9)*9;
+            opener.openInventory(Bukkit.createInventory(opener, size, confirm));
+            final Inventory top = opener.getOpenInventory().getTopInventory();
+            for(ItemStack is : unclaimed_purchases) {
+                top.setItem(top.firstEmpty(), is);
+            }
+            opener.updateInventory();
         }
-        opener.updateInventory();
     }
     public void roll(@NotNull Player player, @NotNull String arg0) {
         final int radius = config.getInt("roll.block radius"), max_roll = getRemainingInt(arg0), roll = RANDOM.nextInt(max_roll);

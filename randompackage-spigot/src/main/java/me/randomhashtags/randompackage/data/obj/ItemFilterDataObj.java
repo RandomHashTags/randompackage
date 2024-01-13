@@ -2,14 +2,16 @@ package me.randomhashtags.randompackage.data.obj;
 
 import me.randomhashtags.randompackage.data.ItemFilterData;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Set;
 
 public final class ItemFilterDataObj implements ItemFilterData {
     private boolean active;
-    private final List<UMaterial> filter;
+    private Set<UMaterial> filter;
 
-    public ItemFilterDataObj(boolean active, List<UMaterial> filter) {
+    public ItemFilterDataObj(boolean active, @NotNull Set<UMaterial> filter) {
         this.active = active;
         this.filter = filter;
     }
@@ -29,7 +31,12 @@ public final class ItemFilterDataObj implements ItemFilterData {
     }
 
     @Override
-    public List<UMaterial> getFilteredItems() {
+    public @NotNull Set<UMaterial> getFilteredItems() {
         return filter;
+    }
+
+    @Override
+    public void addFilteredItem(@NotNull UMaterial material) {
+        filter.add(material);
     }
 }

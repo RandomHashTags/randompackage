@@ -18,8 +18,6 @@ import java.util.stream.Collectors;
 public enum SuperiorSky implements RPFeatureSpigot, Regional {
     INSTANCE;
 
-    private com.bgsoftware.superiorskyblock.api.SuperiorSkyblock ss;
-
     @NotNull
     @Override
     public String getIdentifier() {
@@ -27,7 +25,6 @@ public enum SuperiorSky implements RPFeatureSpigot, Regional {
     }
     @Override
     public void load() {
-        ss = SuperiorSkyblockAPI.getSuperiorSkyblock();
     }
     @Override
     public void unload() {
@@ -58,7 +55,7 @@ public enum SuperiorSky implements RPFeatureSpigot, Regional {
     }
     public @NotNull Set<UUID> getAssociates(UUID player) {
         final Island i = getIsland(player);
-        return i != null ? getAllMembers(i) : null;
+        return i != null ? getAllMembers(i) : new HashSet<>();
     }
     public @NotNull Set<UUID> getNeutrals(UUID player) {
         final Set<UUID> a = new HashSet<>();
@@ -79,7 +76,7 @@ public enum SuperiorSky implements RPFeatureSpigot, Regional {
         return getNeutrals(player);
     }
     public @NotNull Set<UUID> getEnemies(UUID player) {
-        return null;
+        return new HashSet<>();
     }
 
     public @NotNull Set<Player> getOnlineAssociates(UUID player) {
@@ -96,7 +93,7 @@ public enum SuperiorSky implements RPFeatureSpigot, Regional {
     public @NotNull List<Chunk> getRegionalChunks(String regionalIdentifier) {
         try {
             final UUID u = UUID.fromString(regionalIdentifier);
-            final Island i = ss.getGrid().getIsland(u);
+            final Island i = SuperiorSkyblockAPI.getGrid().getIsland(u);
             return i.getAllChunks();
         } catch (Exception e) {
             throw new NullPointerException("Regional Identifier with UUID \"" + regionalIdentifier + "\" not found!");

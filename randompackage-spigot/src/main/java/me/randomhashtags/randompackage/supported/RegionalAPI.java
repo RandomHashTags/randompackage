@@ -19,7 +19,7 @@ public enum RegionalAPI implements UVersionableSpigot {
 
     private boolean WORLD_GUARD, FACTIONS_UUID, A_SKYBLOCK, SUPERIOR_SKYBLOCK, EPIC_SKYBLOCK;
 
-    private boolean isTrue(String path) {
+    private boolean isTrue(@NotNull String path) {
         return RandomPackage.INSTANCE.config.getBoolean(path);
     }
     public void setup() {
@@ -87,6 +87,7 @@ public enum RegionalAPI implements UVersionableSpigot {
         return EPIC_SKYBLOCK;
     }
 
+    @NotNull
     public HashMap<Regional, String> getRegionalIdentifiersAt(@NotNull Location l) {
         final HashMap<Regional, String> identifiers = new HashMap<>();
         if(hookedFactionsUUID()) {
@@ -145,6 +146,7 @@ public enum RegionalAPI implements UVersionableSpigot {
         return false;
     }
 
+    @NotNull
     public HashMap<Regional, String> getChatModes(@NotNull UUID player) {
         final HashMap<Regional, String> modes = new HashMap<>();
         if(hookedFactionsUUID()) {
@@ -165,17 +167,17 @@ public enum RegionalAPI implements UVersionableSpigot {
         }
         return modes;
     }
+    @NotNull
     public List<Player> getReceivingPlayers(@NotNull UUID player, @NotNull HashMap<Regional, String> chatModes) {
         final List<Player> players = new ArrayList<>();
         for(Regional regional : chatModes.keySet()) {
             final Collection<Player> associates = regional.getOnlineAssociates(player);
-            if(associates != null) {
-                players.addAll(associates);
-            }
+            players.addAll(associates);
         }
         return players;
     }
 
+    @NotNull
     private List<UUID> getRelation(@NotNull UUID player, int type) {
         final List<UUID> uuids = new ArrayList<>();
         if(FACTIONS_UUID) {
@@ -218,18 +220,23 @@ public enum RegionalAPI implements UVersionableSpigot {
         }
     }
 
+    @NotNull
     public List<UUID> getAssociates(@NotNull UUID player) {
         return getRelation(player, 0);
     }
+    @NotNull
     public List<UUID> getNeutrals(@NotNull UUID player) {
         return getRelation(player, 1);
     }
+    @NotNull
     public List<UUID> getAllies(@NotNull UUID player) {
         return getRelation(player, 2);
     }
+    @NotNull
     public List<UUID> getTruces(@NotNull UUID player) {
         return getRelation(player, 3);
     }
+    @NotNull
     public List<UUID> getEnemies(@NotNull UUID player) {
         return getRelation(player, 4);
     }

@@ -268,7 +268,7 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
         }
         player.updateInventory();
     }
-    private void doAnimation(Player player, MonthlyCrate crate) {
+    private void doAnimation(@NotNull Player player, @NotNull MonthlyCrate crate) {
         final String identifier = crate.getIdentifier();
         final Inventory inv = crate.getBonus().getInventory();
         final List<Integer> rewardSlots = crate.getRewardSlots(), bonusSlots = crate.getBonusRewardSlots();
@@ -372,7 +372,7 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
             pdata.getMonthlyCrateData().getOwned().put(crate.getIdentifier(), true);
         }
     }
-    public void viewCategory(Player player, int category) {
+    public void viewCategory(@NotNull Player player, int category) {
         if(categoriez.containsKey(category)) {
             final String playerName = player.getName();
             final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());

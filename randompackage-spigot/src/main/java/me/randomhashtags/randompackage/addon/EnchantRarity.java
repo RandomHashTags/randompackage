@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addon.util.Identifiable;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ public interface EnchantRarity extends Identifiable, GivedpItemableSpigot {
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "raritybook" };
     }
+    @Nullable
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final EnchantRarity rarity = getCustomEnchantRarity(originalInput.split(":")[1]);
         return rarity != null ? rarity.getRevealItem() : null;
@@ -30,5 +32,5 @@ public interface EnchantRarity extends Identifiable, GivedpItemableSpigot {
     int getSuccessSlot();
     int getDestroySlot();
     Firework getFirework();
-    List<CustomEnchantSpigot> getEnchants();
+    @NotNull List<CustomEnchantSpigot> getEnchants();
 }

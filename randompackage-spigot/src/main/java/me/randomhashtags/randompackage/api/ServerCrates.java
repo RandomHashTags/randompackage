@@ -103,7 +103,7 @@ public enum ServerCrates implements RPFeatureSpigot {
 			tasks.remove(uuid);
 		}
 	}
-	private void revealBackgroundLoot(Player player) {
+	private void revealBackgroundLoot(@NotNull Player player) {
 		final UUID uuid = player.getUniqueId();
 		final ServerCrate crate = revealing_loot.get(uuid);
 		tasks.put(uuid, new ArrayList<>());

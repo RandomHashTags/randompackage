@@ -192,6 +192,7 @@ public enum Jackpot implements RPFeatureSpigot, CommandExecutor {
         pick_next_winner = time + winnerPickedEvery * 1000;
         startTask(time);
     }
+    @NotNull
     public List<UUID> getTickets() {
         final List<UUID> list = new ArrayList<>();
         for(UUID uuid : tickets_sold.keySet()) {

@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addon.obj;
 
 import me.randomhashtags.randompackage.addon.FactionUpgradeLevel;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ public final class FactionUpgradeLevelObj implements FactionUpgradeLevel {
     private final double value;
     private final String string;
     private final List<String> cost;
-    public FactionUpgradeLevelObj(int asInt, double value, String string, List<String> cost) {
+    public FactionUpgradeLevelObj(int asInt, double value, String string, @NotNull List<String> cost) {
         this.asInt = asInt;
         this.value = value;
         this.string = string;
@@ -24,7 +25,7 @@ public final class FactionUpgradeLevelObj implements FactionUpgradeLevel {
     public String getString() {
         return string;
     }
-    public List<String> getCost() {
+    public @NotNull List<String> getCost() {
         return cost;
     }
 }

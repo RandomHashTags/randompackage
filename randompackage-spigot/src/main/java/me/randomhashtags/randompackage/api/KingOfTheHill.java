@@ -141,7 +141,8 @@ public enum KingOfTheHill implements RPFeatureSpigot, CommandExecutor {
 		}
 		stopKOTH();
 	}
-	
+
+	@NotNull
 	public List<ItemStack> getRandomLootbagContents() {
 		final List<ItemStack> loot = new ArrayList<>();
 		for(String reward : lootbagRewards) {

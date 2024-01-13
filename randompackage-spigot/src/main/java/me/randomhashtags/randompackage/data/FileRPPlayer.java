@@ -83,7 +83,8 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         }
     }
 
-    public static FileRPPlayer get(UUID player) {
+    @NotNull
+    public static FileRPPlayer get(@NotNull UUID player) {
         return PLAYERS.getOrDefault(player, new FileRPPlayer(player)).load();
     }
 
@@ -371,11 +372,13 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
     @Override
     public CustomEnchantData getCustomEnchantData() {
         if(customEnchantData == null && CustomEnchants.INSTANCE.isEnabled()) {
-            List<String> list = new ArrayList<>();
+            final List<String> list;
             if(yml.get("custom enchants") != null) {
                 list = yml.getStringList("custom enchants.entities");
             } else if(yml.get("custom enchant entities") != null) {
                 list = yml.getStringList("custom enchant entities");
+            } else {
+                list = new ArrayList<>();
             }
 
             final List<LivingCustomEnchantEntity> entities = new ArrayList<>();
@@ -496,7 +499,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
     public ItemFilterData getItemFilterData() {
         if(itemFilterData == null && ItemFilter.INSTANCE.isEnabled()) {
             boolean enabled = false;
-            final List<UMaterial> filter = new ArrayList<>();
+            final Set<UMaterial> filter = new HashSet<>();
             String path = null;
             if(yml.get("item filter") != null) {
                 enabled = yml.getBoolean("item filter.enabled");

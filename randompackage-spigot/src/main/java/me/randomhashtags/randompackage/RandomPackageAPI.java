@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
 import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import me.randomhashtags.randompackage.util.listener.RPEventsSpigot;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -41,7 +42,7 @@ public enum RandomPackageAPI implements RPFeatureSpigot, CommandExecutor {
                             "&6&m&l---------------------------------------------",
                             "&7- Author: &6RandomHashTags",
                             "&7- RandomPackage Version: &b" + RANDOM_PACKAGE.getDescription().getVersion(),
-                            "&7- Server Version: &f" + VERSION,
+                            "&7- Server Version: &f" + Bukkit.getVersion(),
                             "&7- PlaceholderAPI: " + (RANDOM_PACKAGE.placeholder_api ? "&atrue &7(&2" + PLUGIN_MANAGER.getPlugin("PlaceholderAPI").getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- Faction Plugin: " + (RegionalAPI.INSTANCE.hookedFactionsUUID() ? "&3" + getFactionType(fac) + " &7(&2" + fac.getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- mcMMO: " + (mcmmo != null ? "&a" + (MCMMOAPI.INSTANCE.isClassic() ? "Classic" : "Overhaul") + " &7(&2" + mcmmo.getDescription().getVersion() + "&7)" : "&cfalse"),

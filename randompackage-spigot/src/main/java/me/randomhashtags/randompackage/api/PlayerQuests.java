@@ -31,6 +31,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.math.BigInteger;
@@ -163,7 +164,8 @@ public enum PlayerQuests implements RPFeatureSpigot, EventExecutor, CommandExecu
     public void unload() {
     }
 
-    public ActivePlayerQuest valueOf(Player player, ItemStack is) {
+    @Nullable
+    public ActivePlayerQuest valueOf(@NotNull Player player, ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             final String name = is.getItemMeta().getDisplayName();
             final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
@@ -179,6 +181,7 @@ public enum PlayerQuests implements RPFeatureSpigot, EventExecutor, CommandExecu
         }
         return null;
     }
+    @NotNull
     private ItemStack getStatus(long time, ActivePlayerQuest a, List<String> available, List<String> completed, List<String> claimed) {
         final PlayerQuest quest = a.getQuest();
         final boolean isCompleted = a.isCompleted(), hasClaimed = a.hasClaimedRewards(), expired = a.isExpired();
@@ -209,7 +212,8 @@ public enum PlayerQuests implements RPFeatureSpigot, EventExecutor, CommandExecu
         item.setItemMeta(itemMeta);
         return item;
     }
-    private String getCompletion(PlayerQuest quest) {
+    @NotNull
+    private String getCompletion(@NotNull PlayerQuest quest) {
         String completion = quest.getCompletion();
         try {
             completion = formatDouble(Double.parseDouble(completion)).split("E")[0];

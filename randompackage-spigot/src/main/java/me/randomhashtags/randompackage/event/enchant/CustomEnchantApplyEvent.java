@@ -3,12 +3,13 @@ package me.randomhashtags.randompackage.event.enchant;
 import me.randomhashtags.randompackage.addon.CustomEnchantSpigot;
 import me.randomhashtags.randompackage.event.RPEvent;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class CustomEnchantApplyEvent extends RPEvent {
-	public final CustomEnchantSpigot enchant;
+	@NotNull public final CustomEnchantSpigot enchant;
 	public final int level, success, destroy;
-	public final String result;
-	public CustomEnchantApplyEvent(Player player, CustomEnchantSpigot enchant, int level, int success, int destroy, String result) {
+	@NotNull public final String result;
+	public CustomEnchantApplyEvent(@NotNull Player player, @NotNull CustomEnchantSpigot enchant, int level, int success, int destroy, @NotNull String result) {
 		super(player);
 		this.enchant = enchant;
 		this.level = level;

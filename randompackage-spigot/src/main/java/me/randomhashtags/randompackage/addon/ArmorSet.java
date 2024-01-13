@@ -17,6 +17,7 @@ public interface ArmorSet extends Identifiable, Nameable, GivedpItemableSpigot {
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "customarmor", "customarmorcrystal", "multicustomarmorcrystal" };
     }
+    @Nullable
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final String[] values = originalInput.split(":");
         final ArmorSet set = getArmorSet(values[1]);

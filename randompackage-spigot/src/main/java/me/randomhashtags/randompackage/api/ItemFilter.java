@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public enum ItemFilter implements RPFeatureSpigot, CommandExecutor {
     INSTANCE;
@@ -134,7 +135,7 @@ public enum ItemFilter implements RPFeatureSpigot, CommandExecutor {
         }
     }
     @NotNull
-    private ItemStack getStatus(@NotNull List<UMaterial> filtered, @NotNull ItemStack is) {
+    private ItemStack getStatus(@NotNull Set<UMaterial> filtered, @NotNull ItemStack is) {
         final ItemMeta itemMeta = is.getItemMeta();
         itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS);
         final UMaterial u = UMaterial.match(is);
@@ -160,7 +161,7 @@ public enum ItemFilter implements RPFeatureSpigot, CommandExecutor {
     }
     public void viewCategory(@NotNull Player player, @NotNull FilterCategory category) {
         player.closeInventory();
-        final List<UMaterial> filtered = FileRPPlayer.get(player.getUniqueId()).getItemFilterData().getFilteredItems();
+        final Set<UMaterial> filtered = FileRPPlayer.get(player.getUniqueId()).getItemFilterData().getFilteredItems();
         final UInventory target = category.getInventory();
         final int size = target.getSize();
         player.openInventory(Bukkit.createInventory(player, size, target.getTitle()));
@@ -191,7 +192,7 @@ public enum ItemFilter implements RPFeatureSpigot, CommandExecutor {
             }
 
             if(category != null) {
-                final List<UMaterial> filtered = FileRPPlayer.get(player.getUniqueId()).getItemFilterData().getFilteredItems();
+                final Set<UMaterial> filtered = FileRPPlayer.get(player.getUniqueId()).getItemFilterData().getFilteredItems();
                 final UMaterial target = UMaterial.match(current);
                 if(filtered.contains(target)) {
                     filtered.remove(target);

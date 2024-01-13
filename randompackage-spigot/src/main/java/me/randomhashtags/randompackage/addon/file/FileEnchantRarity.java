@@ -97,7 +97,7 @@ public final class FileEnchantRarity extends RPAddonSpigot implements EnchantRar
     public Firework getFirework() {
         return firework;
     }
-    public List<CustomEnchantSpigot> getEnchants() {
+    public @NotNull List<CustomEnchantSpigot> getEnchants() {
         return enchants;
     }
 }

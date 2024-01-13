@@ -51,7 +51,7 @@ public interface UVersionable extends RomanNumerals, DefaultFileGeneration {
         final long m = input.endsWith("k") ? 1000 : input.endsWith("m") ? 1000000 : input.endsWith("b") ? 1000000000 : 1;
         return BigDecimal.valueOf(getRemainingDouble(input)*m);
     }
-    default BigDecimal getBigDecimal(String value) {
+    default @NotNull BigDecimal getBigDecimal(@NotNull String value) {
         return BigDecimal.valueOf(Double.parseDouble(value));
     }
     default BigDecimal getRandomBigDecimal(BigDecimal min, BigDecimal max) {

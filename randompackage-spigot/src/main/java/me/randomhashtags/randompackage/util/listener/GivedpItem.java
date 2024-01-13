@@ -358,7 +358,7 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
             }
         }
     }
-    private boolean isEquipment(ItemStack is) {
+    private boolean isEquipment(@Nullable ItemStack is) {
         if(is != null) {
             final String materialName = is.getType().name();
             return materialName.endsWith("BOW") || materialName.endsWith("_AXE") || materialName.endsWith("SWORD") || materialName.endsWith("HELMET") || materialName.endsWith("CHESTPLATE") || materialName.endsWith("LEGGINGS") || materialName.endsWith("BOOTS");

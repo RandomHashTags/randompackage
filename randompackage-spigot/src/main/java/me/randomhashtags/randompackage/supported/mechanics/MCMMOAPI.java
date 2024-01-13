@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -73,13 +74,15 @@ public enum MCMMOAPI implements Reflect {
 		}
 		return null;
 	}
-	public String getSkillName(String skill) {
+	@Nullable
+	public String getSkillName(@NotNull String skill) {
 		if(skill.equalsIgnoreCase("random")) {
 			skill = getRandomSkill();
 		}
 		final String skillName = itemsConfig.getString("mcmmo vouchers.skill names." + skill.toLowerCase().replace("_skills", ""));
 		return skillName != null ? colorize(skillName) : null;
 	}
+	@NotNull
 	public String getRandomSkill() {
 		if(isClassic) {
 			final com.gmail.nossr50.datatypes.skills.SkillType[] a = com.gmail.nossr50.datatypes.skills.SkillType.values();
@@ -89,6 +92,7 @@ public enum MCMMOAPI implements Reflect {
 			return a[RANDOM.nextInt(a.length)].name();
 		}
 	}
+	@Nullable
 	public String getSkillName(McMMOPlayerXpGainEvent event) {
 		try {
 			final String skill;
@@ -107,12 +111,12 @@ public enum MCMMOAPI implements Reflect {
 		}
 	}
 
-	public void addRawXP(Player player, String skill, int xp) {
+	public void addRawXP(@NotNull Player player, String skill, int xp) {
 		if(skill != null) {
 			ExperienceAPI.addRawXP(player, skill, xp);
 		}
 	}
-	public void addLevels(Player player, String skill, int levels) {
+	public void addLevels(@NotNull Player player, String skill, int levels) {
 		if(skill != null) {
 			ExperienceAPI.addLevel(player, skill, levels);
 		}

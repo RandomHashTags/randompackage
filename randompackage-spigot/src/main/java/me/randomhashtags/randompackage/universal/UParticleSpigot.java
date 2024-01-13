@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.universal;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 
@@ -109,16 +110,22 @@ public enum UParticleSpigot implements UVersionableSpigot {
                         this.particle = Effect.valueOf(versionName);
                     } catch (Exception ee) {
                         if(!versionName.equals("ITEM_TAKE")) {
-                            sendConsoleMessage("[UParticle] Particle/Effect \"" + versionName + "\" doesn't exist in " + VERSION + "!");
+                            sendConsoleMessage("[UParticle] Particle/Effect \"" + versionName + "\" doesn't exist in " + Bukkit.getVersion() + "!");
                         }
                     }
                 }
             }
         }
     }
-    public String getVersionName() { return versionName; }
-    public String[] getNames() { return names; }
-    public Object getParticle() { return particle; }
+    public String getVersionName() {
+        return versionName;
+    }
+    public String[] getNames() {
+        return names;
+    }
+    public Object getParticle() {
+        return particle;
+    }
 
     public void play(Player player, Location l, int count) {
         if(EIGHT) {
@@ -140,7 +147,7 @@ public enum UParticleSpigot implements UVersionableSpigot {
             player.spawnParticle((Particle) particle, l, count, material);
         }
     }
-    public void play(Location l, int count) {
+    public void play(@NotNull Location l, int count) {
         final World w = l.getWorld();
         if(EIGHT) {
             final Effect e = (Effect) particle;
@@ -161,6 +168,7 @@ public enum UParticleSpigot implements UVersionableSpigot {
         }
     }
 
+    @Nullable
     private String getName() {
         final int ver = EIGHT ? 0 : NINE ? 1 : TEN ? 2 : ELEVEN ? 3 : TWELVE ? 4 : THIRTEEN ? 5 : FOURTEEN ? 6 : FIFTEEN ? 7 : names.length-1;
         int realver = names.length <= ver ? names.length-1 : ver;

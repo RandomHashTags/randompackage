@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.addon.dev;
 
 import me.randomhashtags.randompackage.addon.util.Rewardable;
 import me.randomhashtags.randompackage.addon.util.Scheduleable;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public interface RaidEvent extends Rewardable, Scheduleable {
     int getMaxAdjacentFactionClaims();
-    BigDecimal getRewardingFactionPoints();
+    @NotNull BigDecimal getRewardingFactionPoints();
 
     String getStatus();
     String getPhase();

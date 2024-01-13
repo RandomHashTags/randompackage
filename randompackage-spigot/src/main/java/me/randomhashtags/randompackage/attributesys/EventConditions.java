@@ -34,10 +34,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Colorable;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public interface EventConditions extends Combo, RPItemStack, Mathable, UVersionableSpigot, RPStorage {
     List<UUID> SPAWNED_FROM_SPAWNER = new ArrayList<>();
@@ -672,7 +669,7 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
                 final EntityEquipment eq = entity instanceof Player ? ((Player) entity).getEquipment() : null;
                 return eq != null && valueOfMask(eq.getHelmet()) != null == Boolean.parseBoolean(value);
             case "hasfiltereditem":
-                final List<UMaterial> m = entity instanceof Player ? FileRPPlayer.get(entity.getUniqueId()).getItemFilterData().getFilteredItems() : null;
+                final Set<UMaterial> m = entity instanceof Player ? FileRPPlayer.get(entity.getUniqueId()).getItemFilterData().getFilteredItems() : null;
                 return m != null && m.contains(UMaterial.match(value));
             case "iscustomboss":
                 return LivingCustomBoss.LIVING != null && LivingCustomBoss.LIVING.containsKey(entity.getUniqueId()) == Boolean.parseBoolean(value);

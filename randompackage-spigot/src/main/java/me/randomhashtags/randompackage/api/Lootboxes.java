@@ -407,6 +407,7 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
         }
         return null;
     }
+    @Nullable
     public Lootbox latest() {
         int topPriority = 0;
         Lootbox lo = null;

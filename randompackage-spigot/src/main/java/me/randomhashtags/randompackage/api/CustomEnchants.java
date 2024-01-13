@@ -699,6 +699,8 @@ public enum CustomEnchants implements EventAttributes, CommandExecutor, Listener
                             } else {
                                 item = new ItemStack(Material.AIR);
                             }
+                        } else {
+                            result = "FAILED";
                         }
                         apply = true;
                         final CustomEnchantApplyEvent ce = new CustomEnchantApplyEvent(player, enchant, level, success, destroy, result);
