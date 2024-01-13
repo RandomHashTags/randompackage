@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.addon.slotbot;
 
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public final class PathCustomItem implements CustomItem {
     }
 
     @Override
-    public List<String> getCommands() {
+    public @Nullable List<String> getCommands() {
         return commands;
     }
 }

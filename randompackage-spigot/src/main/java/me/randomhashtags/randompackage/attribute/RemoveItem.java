@@ -6,12 +6,13 @@ import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
 public final class RemoveItem extends AbstractEventAttribute {
     @Override
-    public void execute(PendingEventAttribute pending, HashMap<String, String> valueReplacements) {
+    public void execute(@NotNull PendingEventAttribute pending, @NotNull HashMap<String, String> valueReplacements) {
         final HashMap<String, Entity> entities = pending.getEntities();
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         final GivedpItem givedpItem = GivedpItem.INSTANCE;

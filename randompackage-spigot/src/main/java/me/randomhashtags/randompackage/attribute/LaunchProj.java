@@ -8,12 +8,13 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
 public final class LaunchProj extends AbstractEventAttribute {
     @Override
-    public void execute(PendingEventAttribute pending, HashMap<String, String> valueReplacements) {
+    public void execute(@NotNull PendingEventAttribute pending, @NotNull HashMap<String, String> valueReplacements) {
         final Event event = pending.getEvent();
         final HashMap<String, Entity> entities = pending.getEntities();
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();

@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public final class SetDamage extends AbstractEventAttribute implements EventEntities {
     @Override
-    public void execute(@NotNull PendingEventAttribute pending, String value, HashMap<String, String> valueReplacements) {
+    public void execute(@NotNull PendingEventAttribute pending, @NotNull String value, @NotNull HashMap<String, String> valueReplacements) {
         final Event event = pending.getEvent();
         if(event instanceof EntityDamageEvent) {
             final EntityDamageEvent e = (EntityDamageEvent) event;

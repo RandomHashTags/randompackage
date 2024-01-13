@@ -6,6 +6,7 @@ import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
 import me.randomhashtags.randompackage.util.obj.TObject;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -27,7 +28,7 @@ public final class StopEnchant extends AbstractEventAttribute {
     }
 
     @Override
-    public void execute(PendingEventAttribute pending) {
+    public void execute(@NotNull PendingEventAttribute pending) {
         final Event event = pending.getEvent();
         if(event instanceof CustomEnchantProcEvent) {
             final CustomEnchantProcEvent c = (CustomEnchantProcEvent) event;

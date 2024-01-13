@@ -5,7 +5,6 @@ import com.massivecraft.factions.event.FPlayerLeaveEvent;
 import com.massivecraft.factions.event.FactionDisbandEvent;
 import com.massivecraft.factions.event.FactionRenameEvent;
 import com.massivecraft.factions.event.LandClaimEvent;
-import com.massivecraft.factions.iface.RelationParticipator;
 import me.randomhashtags.randompackage.event.regional.FactionClaimLandEvent;
 import me.randomhashtags.randompackage.event.regional.FactionLeaveEvent;
 import me.randomhashtags.randompackage.event.regional.RegionDisbandEvent;
@@ -26,12 +25,7 @@ import java.util.UUID;
 
 public enum FactionsUUID implements Reflect, Regional {
     INSTANCE;
-
-    private FPlayers fplayers;
-    private Factions factions;
-    private Board board;
     private HashMap<String, HashMap<String, List<UUID>>> relations;
-    private boolean isLegacy;
 
     @NotNull
     @Override
@@ -40,33 +34,14 @@ public enum FactionsUUID implements Reflect, Regional {
     }
     @Override
     public void load() {
-        fplayers = FPlayers.getInstance();
-        factions = Factions.getInstance();
-        board = Board.getInstance();
         relations = new HashMap<>();
-        try {
-            Class.forName("com.massivecraft.factions.struct.Relation");
-            isLegacy = true;
-        } catch (Exception ignored) {
-        }
     }
     @Override
     public void unload() {
     }
 
     private boolean isRelation(FPlayer fplayer, Faction faction, String type) {
-        final Class<? extends FPlayer> targetClass = fplayer.getClass();
-        String relation = "";
-        try {
-            if(isLegacy) {
-                relation = ((com.massivecraft.factions.struct.Relation) targetClass.getMethod("getRelationTo", RelationParticipator.class).invoke(fplayer, faction)).name();
-            } else {
-                relation = ((com.massivecraft.factions.perms.Relation) targetClass.getMethod("getRelationTo", RelationParticipator.class).invoke(fplayer, faction)).name();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return relation.equalsIgnoreCase(type);
+        return fplayer.getRelationTo(faction).name().equalsIgnoreCase(type);
 
     }
 
@@ -77,7 +52,7 @@ public enum FactionsUUID implements Reflect, Regional {
     }
 
     private FPlayer getFPlayer(@NotNull UUID uuid) {
-        return fplayers.getByOfflinePlayer(Bukkit.getOfflinePlayer(uuid));
+        return FPlayers.getInstance().getByOfflinePlayer(Bukkit.getOfflinePlayer(uuid));
     }
     @Nullable
     public ChatColor getRelationColor(@NotNull OfflinePlayer player, @NotNull Player target) {
@@ -99,7 +74,7 @@ public enum FactionsUUID implements Reflect, Regional {
         } else {
             final boolean isMembers = relation_type.equals("MEMBERS"), isEnemies = relation_type.equals("ENEMIES"), isAllies = relation_type.equals("ALLIES"), isTruces = relation_type.equals("TRUCES"), isNeutral = relation_type.equals("NEUTRAL");
             final List<UUID> members = new ArrayList<>();
-            for(FPlayer fp : fplayers.getAllFPlayers()) {
+            for(FPlayer fp : FPlayers.getInstance().getAllFPlayers()) {
                 if(fp != null && (
                         isMembers && isRelation(fp, f, "MEMBER")
                         || isEnemies && isRelation(fp, f, "ENEMY")
@@ -117,28 +92,28 @@ public enum FactionsUUID implements Reflect, Regional {
         }
     }
     @Override
-    public List<UUID> getAssociates(UUID player) {
+    public @NotNull List<UUID> getAssociates(UUID player) {
         return getType(player, "MEMBERS");
     }
     @Override
-    public List<UUID> getNeutrals(UUID player) {
+    public @NotNull List<UUID> getNeutrals(UUID player) {
         return getType(player, "NEUTRAL");
     }
     @Override
-    public List<UUID> getAllies(UUID player) {
+    public @NotNull List<UUID> getAllies(UUID player) {
         return getType(player, "ALLIES");
     }
     @Override
-    public List<UUID> getTruces(UUID player) {
+    public @NotNull List<UUID> getTruces(UUID player) {
         return getType(player, "TRUCES");
     }
     @Override
-    public List<UUID> getEnemies(UUID player) {
+    public @NotNull List<UUID> getEnemies(UUID player) {
         return getType(player, "ENEMIES");
     }
 
     public boolean canModify(@NotNull UUID player, Location blockLocation) {
-        final Faction p = getFPlayer(player).getFaction(), f = board.getFactionAt(new FLocation(blockLocation));
+        final Faction p = getFPlayer(player).getFaction(), f = Board.getInstance().getFactionAt(new FLocation(blockLocation));
         return f.isWilderness() || p != null && p.equals(f);
     }
 
@@ -150,7 +125,7 @@ public enum FactionsUUID implements Reflect, Regional {
 
     @NotNull
     public List<Chunk> getRegionalChunks(String regionalIdentifier) {
-        final Faction faction = factions.getByTag(regionalIdentifier);
+        final Faction faction = Factions.getInstance().getByTag(regionalIdentifier);
         final List<Chunk> chunks = new ArrayList<>();
         if(faction != null) {
             for(FLocation location : faction.getAllClaims()) {
@@ -164,10 +139,6 @@ public enum FactionsUUID implements Reflect, Regional {
     }
 
     public String getRole(@NotNull UUID player) {
-        if(isLegacy) {
-            sendConsoleErrorMessage("FactionsUUID", "Make sure you're using a supported FactionsUUID version! Messages sent may appear inaccurate to others!");
-            return "";
-        }
         return getFPlayer(player).getRole().getPrefix();
     }
     @Nullable
@@ -176,7 +147,7 @@ public enum FactionsUUID implements Reflect, Regional {
         return f != null ? f.getTag() : null;
     }
     public String getRegionalIdentifierAt(Location l) {
-        return ChatColor.stripColor(board.getFactionAt(new FLocation(l)).getTag());
+        return ChatColor.stripColor(Board.getInstance().getFactionAt(new FLocation(l)).getTag());
     }
     public String getChatMode(UUID player) {
         return getFPlayer(player).getChatMode().name();

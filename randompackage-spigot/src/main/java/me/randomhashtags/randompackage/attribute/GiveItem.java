@@ -6,12 +6,13 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
 public final class GiveItem extends AbstractEventAttribute {
     @Override
-    public void execute(PendingEventAttribute pending) {
+    public void execute(@NotNull PendingEventAttribute pending) {
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         final RandomPackageAPI api = RandomPackageAPI.INSTANCE;
         for(Entity e : recipientValues.keySet()) {

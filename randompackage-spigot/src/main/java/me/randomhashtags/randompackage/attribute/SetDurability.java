@@ -26,7 +26,7 @@ public final class SetDurability extends AbstractEventAttribute {
         }
     }
     @Override
-    public void execute(PendingEventAttribute pending) {
+    public void execute(@NotNull PendingEventAttribute pending) {
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         for(Entity e : recipientValues.keySet()) {
             setDurability(e, recipientValues.get(e));

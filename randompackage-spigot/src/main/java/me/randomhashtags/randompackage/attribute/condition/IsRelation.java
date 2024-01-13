@@ -4,13 +4,14 @@ import me.randomhashtags.randompackage.attribute.AbstractEventCondition;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.UUID;
 
 public final class IsRelation extends AbstractEventCondition {
     @Override
-    public boolean check(String entity, HashMap<String, Entity> entities, String value) {
+    public boolean check(@NotNull String entity, @NotNull HashMap<String, Entity> entities, @NotNull String value) {
         final String[] values = value.split(":");
         value = values[1];
         final Entity entity1 = entities.get(entity), entity2 = entities.get(values[0]);

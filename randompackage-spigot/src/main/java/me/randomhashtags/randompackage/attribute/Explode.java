@@ -1,12 +1,13 @@
 package me.randomhashtags.randompackage.attribute;
 
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
 public final class Explode extends AbstractEventAttribute {
     @Override
-    public void executeAt(HashMap<Location, String> locations) {
+    public void executeAt(@NotNull HashMap<Location, String> locations) {
         for(Location l : locations.keySet()) {
             final String v = locations.get(l);
             if(v != null) {

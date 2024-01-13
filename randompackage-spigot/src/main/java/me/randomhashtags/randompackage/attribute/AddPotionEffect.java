@@ -5,13 +5,14 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public final class AddPotionEffect extends AbstractEventAttribute {
     @Override
-    public void execute(PendingEventAttribute pending, HashMap<String, String> valueReplacements) {
+    public void execute(@NotNull PendingEventAttribute pending, @NotNull HashMap<String, String> valueReplacements) {
         final HashMap<String, Entity> entities = pending.getEntities();
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         for(Map.Entry<Entity, String> map : recipientValues.entrySet()) {

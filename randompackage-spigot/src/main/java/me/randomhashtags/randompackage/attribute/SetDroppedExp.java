@@ -5,12 +5,13 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
 public final class SetDroppedExp extends AbstractEventAttribute {
     @Override
-    public void execute(PendingEventAttribute pending, String value, HashMap<String, String> valueReplacements) {
+    public void execute(@NotNull PendingEventAttribute pending, @NotNull String value, @NotNull HashMap<String, String> valueReplacements) {
         final Event event = pending.getEvent();
         final HashMap<String, Entity> entities = pending.getEntities();
         final int amount = getAmount(entities, value, valueReplacements);

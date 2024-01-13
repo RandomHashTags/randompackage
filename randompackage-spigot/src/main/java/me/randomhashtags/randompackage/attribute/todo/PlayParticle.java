@@ -4,13 +4,14 @@ import me.randomhashtags.randompackage.attribute.AbstractEventAttribute;
 import me.randomhashtags.randompackage.universal.UParticleSpigot;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
 public final class PlayParticle extends AbstractEventAttribute {
     // TODO: finish this attribute
     @Override
-    public void executeAt(HashMap<Location, String> locations) {
+    public void executeAt(@NotNull HashMap<Location, String> locations) {
         for(Location l : locations.keySet()) {
             final World w = l.getWorld();
             final String[] values = locations.get(l).split(":");

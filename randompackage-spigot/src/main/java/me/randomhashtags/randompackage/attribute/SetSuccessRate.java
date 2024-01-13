@@ -5,12 +5,13 @@ import me.randomhashtags.randompackage.event.BlackScrollUseEvent;
 import me.randomhashtags.randompackage.event.RandomizationScrollUseEvent;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
 public final class SetSuccessRate extends AbstractEventAttribute {
     @Override
-    public void execute(PendingEventAttribute pending, String value, HashMap<String, String> valueReplacements) {
+    public void execute(@NotNull PendingEventAttribute pending, @NotNull String value, @NotNull HashMap<String, String> valueReplacements) {
         final Event event = pending.getEvent();
         final HashMap<String, Entity> entities = pending.getKeyEntities();
         if(value != null) {

@@ -2,6 +2,7 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'java-library'
+    id 'java'
 }
 
 repositories {
@@ -39,9 +40,9 @@ repositories {
 
 dependencies {
     compileOnly project(':Utilities')
-    implementation group: 'org.json', name: 'json', version: '20230227'
+    implementation group: 'org.json', name: 'json', version: '20231013'
     // You need to add the Spigot jars yourself, otherwise you need to use BuildTools and import them
-    compileOnly 'org.spigotmc:spigot:1.19.2-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT'
     //compileOnly 'org.bukkit:craftbukkit:1.13.2-R0.1-SNAPSHOT'
     //
     implementation 'me.clip:placeholderapi:2.10.3'

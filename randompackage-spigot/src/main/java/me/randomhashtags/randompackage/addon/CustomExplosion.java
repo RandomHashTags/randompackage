@@ -14,6 +14,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +26,7 @@ public interface CustomExplosion extends Attributable, Itemable, GivedpItemableS
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "customexplosion" };
     }
+    @Nullable
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final CustomExplosion explosion = getCustomExplosion(originalInput.split(":")[1]);
         return explosion != null ? explosion.getItem() : null;
@@ -51,6 +53,7 @@ public interface CustomExplosion extends Attributable, Itemable, GivedpItemableS
             }
         }
     }
+    @NotNull
     default List<Block> getBlockList(@NotNull EntityExplodeEvent event) {
         for(String string : getAttributes()) {
             if(!string.contains("&&") && !string.contains("||") && string.toLowerCase().startsWith("affects_only;")) {
@@ -71,6 +74,7 @@ public interface CustomExplosion extends Attributable, Itemable, GivedpItemableS
         }
         return event.blockList();
     }
+    @NotNull
     default List<Block> getAffectedBlocks(@NotNull EntityExplodeEvent event, @NotNull String input) {
         final Material material = UMaterial.match(input.split(";")[1].toUpperCase()).getMaterial();
         final List<Block> bl = event.blockList();

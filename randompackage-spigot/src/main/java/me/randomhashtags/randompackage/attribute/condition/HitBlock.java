@@ -4,10 +4,11 @@ import me.randomhashtags.randompackage.attribute.AbstractEventCondition;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.jetbrains.annotations.NotNull;
 
 public final class HitBlock extends AbstractEventCondition {
     @Override
-    public boolean check(Event event, String value) {
+    public boolean check(@NotNull Event event, @NotNull String value) {
         final PlayerInteractEvent interactEvent = event instanceof PlayerInteractEvent ? (PlayerInteractEvent) event : null;
         if(interactEvent != null) {
             final Block block = interactEvent.getClickedBlock();

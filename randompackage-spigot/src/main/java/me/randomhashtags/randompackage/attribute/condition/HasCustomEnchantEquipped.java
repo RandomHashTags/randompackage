@@ -7,10 +7,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public final class HasCustomEnchantEquipped extends AbstractEventCondition {
     @Override
-    public boolean check(Entity entity, String value) {
+    public boolean check(@NotNull Entity entity, @NotNull String value) {
         boolean has = false;
         if(entity instanceof LivingEntity) {
             final EntityEquipment equipment = ((LivingEntity) entity).getEquipment();

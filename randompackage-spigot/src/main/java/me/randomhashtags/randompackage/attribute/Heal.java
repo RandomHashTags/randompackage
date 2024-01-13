@@ -3,12 +3,13 @@ package me.randomhashtags.randompackage.attribute;
 import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
 public final class Heal extends AbstractEventAttribute {
     @Override
-    public void execute(PendingEventAttribute pending, HashMap<String, String> valueReplacements) {
+    public void execute(@NotNull PendingEventAttribute pending, @NotNull HashMap<String, String> valueReplacements) {
         final HashMap<String, Entity> entities = pending.getEntities();
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         for(Entity e : recipientValues.keySet()) {

@@ -56,11 +56,11 @@ public enum SuperiorSky implements RPFeatureSpigot, Regional {
     public boolean areEnemies(UUID player1, UUID player2) {
         return false;
     }
-    public Set<UUID> getAssociates(UUID player) {
+    public @NotNull Set<UUID> getAssociates(UUID player) {
         final Island i = getIsland(player);
         return i != null ? getAllMembers(i) : null;
     }
-    public Set<UUID> getNeutrals(UUID player) {
+    public @NotNull Set<UUID> getNeutrals(UUID player) {
         final Set<UUID> a = new HashSet<>();
         final UUID tl = getSPlayer(player).getIslandLeader().getUniqueId();
         if(tl != null && !tl.equals(player)) {
@@ -72,17 +72,17 @@ public enum SuperiorSky implements RPFeatureSpigot, Regional {
         }
         return a;
     }
-    public Set<UUID> getAllies(UUID player) {
+    public @NotNull Set<UUID> getAllies(UUID player) {
         return getNeutrals(player);
     }
-    public Set<UUID> getTruces(UUID player) {
+    public @NotNull Set<UUID> getTruces(UUID player) {
         return getNeutrals(player);
     }
-    public Set<UUID> getEnemies(UUID player) {
+    public @NotNull Set<UUID> getEnemies(UUID player) {
         return null;
     }
 
-    public Set<Player> getOnlineAssociates(UUID player) {
+    public @NotNull Set<Player> getOnlineAssociates(UUID player) {
         final Island i = getIsland(player);
         final Set<Player> a = new HashSet<>();
         if(i != null) {
@@ -93,7 +93,7 @@ public enum SuperiorSky implements RPFeatureSpigot, Regional {
         return a;
     }
 
-    public List<Chunk> getRegionalChunks(String regionalIdentifier) {
+    public @NotNull List<Chunk> getRegionalChunks(String regionalIdentifier) {
         try {
             final UUID u = UUID.fromString(regionalIdentifier);
             final Island i = ss.getGrid().getIsland(u);

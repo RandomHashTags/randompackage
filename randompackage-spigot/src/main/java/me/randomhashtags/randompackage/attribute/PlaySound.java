@@ -6,19 +6,20 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
 public final class PlaySound extends AbstractEventAttribute {
     @Override
-    public void execute(PendingEventAttribute pending) {
+    public void execute(@NotNull PendingEventAttribute pending) {
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         for(Entity e : recipientValues.keySet()) {
             playsound(e, recipientValues.get(e));
         }
     }
     @Override
-    public void executeAt(HashMap<Location, String> locations) {
+    public void executeAt(@NotNull HashMap<Location, String> locations) {
         for(Location l : locations.keySet()) {
             playsound(l, locations.get(l));
         }

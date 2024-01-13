@@ -7,13 +7,14 @@ import me.randomhashtags.randompackage.event.GlobalChallengeParticipateEvent;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 
 public final class IncreaseGlobalChallenge extends AbstractEventAttribute {
     @Override
-    public void execute(PendingEventAttribute pending, HashMap<String, String> valueReplacements) {
+    public void execute(@NotNull PendingEventAttribute pending, @NotNull HashMap<String, String> valueReplacements) {
         final Event event = pending.getEvent();
         final HashMap<String, Entity> entities = pending.getEntities();
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();

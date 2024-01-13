@@ -9,10 +9,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 public final class DepleteRarityGem extends AbstractEventCondition {
     @Override
-    public boolean check(Entity entity, String value) {
+    public boolean check(@NotNull Entity entity, @NotNull String value) {
         if(entity instanceof Player) {
             final String[] values = value.split(":");
             final RarityGem gem = getRarityGem(values[0]);

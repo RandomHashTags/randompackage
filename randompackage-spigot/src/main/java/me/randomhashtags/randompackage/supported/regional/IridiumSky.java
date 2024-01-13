@@ -1,9 +1,10 @@
 package me.randomhashtags.randompackage.supported.regional;
 
 import com.iridium.iridiumskyblock.IridiumSkyblock;
-import com.iridium.iridiumskyblock.Island;
-import com.iridium.iridiumskyblock.IslandManager;
-import com.iridium.iridiumskyblock.User;
+import com.iridium.iridiumskyblock.api.IridiumSkyblockAPI;
+import com.iridium.iridiumskyblock.database.Island;
+import com.iridium.iridiumskyblock.database.User;
+import com.iridium.iridiumteams.database.IridiumUser;
 import me.randomhashtags.randompackage.supported.Regional;
 import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
@@ -15,12 +16,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public enum IridiumSky implements RPFeatureSpigot, Regional {
     INSTANCE;
-
-    private IslandManager im;
 
     @Override
     public @NotNull String getIdentifier() {
@@ -28,49 +29,43 @@ public enum IridiumSky implements RPFeatureSpigot, Regional {
     }
     @Override
     public void load() {
-        im = IridiumSkyblock.getIslandManager();
     }
     @Override
     public void unload() {
     }
 
+    @NotNull
     private User getUser(UUID player) {
-        return User.getUser(Bukkit.getOfflinePlayer(player).getName());
+        return IridiumSkyblockAPI.getInstance().getUser(Bukkit.getOfflinePlayer(player));
     }
 
     public boolean canModify(UUID player, Location l) {
-        final OfflinePlayer op = Bukkit.getOfflinePlayer(player);
-        final Island is = im.getIslandViaLocation(l);
-        return is.getMembers().contains(op.getName());
-    }
-
-    public List<UUID> getAssociates(UUID player) {
-        final List<UUID> associates = new ArrayList<>();
         final User user = getUser(player);
-        if(user != null) {
-            final Island island = user.getIsland();
-            if(island != null) {
-                for(String s : island.getMembers()) {
-                    associates.add(Bukkit.getOfflinePlayer(s).getUniqueId());
-                }
-            }
+        final Optional<Island> is = IridiumSkyblockAPI.getInstance().getIslandViaLocation(l);
+        return is.isPresent() && IridiumSkyblock.getInstance().getIslandManager().getMembersOnIsland(is.get()).contains(user);
+    }
+    @NotNull
+    public List<UUID> getAssociates(UUID player) {
+        final Optional<Island> island = getUser(player).getIsland();
+        if(island.isPresent()) {
+            return IridiumSkyblock.getInstance().getIslandManager().getMembersOnIsland(island.get()).stream().map(IridiumUser::getUuid).collect(Collectors.toList());
         }
-        return associates;
+        return new ArrayList<>();
     }
-    public List<UUID> getNeutrals(UUID player) {
+    public @NotNull List<UUID> getNeutrals(UUID player) {
         return getAssociates(player);
     }
-    public List<UUID> getAllies(UUID player) {
+    public @NotNull List<UUID> getAllies(UUID player) {
         return getAssociates(player);
     }
-    public List<UUID> getTruces(UUID player) {
+    public @NotNull List<UUID> getTruces(UUID player) {
         return getAssociates(player);
     }
-    public List<UUID> getEnemies(UUID player) {
+    public @NotNull List<UUID> getEnemies(UUID player) {
         return new ArrayList<>();
     }
 
-    public List<Player> getOnlineAssociates(UUID player) {
+    public @NotNull List<Player> getOnlineAssociates(UUID player) {
         final List<UUID> associates = getAssociates(player);
         final List<Player> online = new ArrayList<>();
         for(UUID u : associates) {
@@ -82,8 +77,8 @@ public enum IridiumSky implements RPFeatureSpigot, Regional {
         return online;
     }
 
-    public List<Chunk> getRegionalChunks(String regionalIdentifier) {
-        return null;
+    public @NotNull List<Chunk> getRegionalChunks(String regionalIdentifier) {
+        return new ArrayList<>();
     }
     public String getRole(UUID player) {
         return null; // latest public release doesn't have roles
@@ -92,12 +87,12 @@ public enum IridiumSky implements RPFeatureSpigot, Regional {
     }
     public String getRegionalIdentifier(UUID player) {
         final User u = getUser(player);
-        final Island i = u.getIsland();
-        return i != null ? Integer.toString(i.getId()) : null;
+        final Optional<Island> i = u.getIsland();
+        return i.isPresent() ? Integer.toString(i.get().getId()) : null;
     }
     public String getRegionalIdentifierAt(Location l) {
-        final Island i = im.getIslandViaLocation(l);
-        return i != null ? Integer.toString(i.getId()) : null;
+        final Optional<Island> i = IridiumSkyblockAPI.getInstance().getIslandViaLocation(l);
+        return i.isPresent() ? Integer.toString(i.get().getId()) : null;
     }
     public String getChatMode(UUID player) {
         return "GLOBAL";

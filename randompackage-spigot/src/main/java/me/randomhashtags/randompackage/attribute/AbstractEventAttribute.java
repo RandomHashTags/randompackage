@@ -37,8 +37,8 @@ public abstract class AbstractEventAttribute implements EventAttribute, EventRep
     public void execute(@NotNull PendingEventAttribute pending, @NotNull String value, @NotNull HashMap<String, String> valueReplacements) {}
 
     public void execute(String value) {}
-    public void execute(Entity entity1, Entity entity2, String value) {}
-    public void executeAt(HashMap<Location, String> locations) {}
-    public void executeData(HashMap<RPPlayer, String> recipientValues, HashMap<String, String> valueReplacements) {}
-    public void executeData(HashMap<String, Entity> entities, HashMap<RPPlayer, String> recipientValues, HashMap<String, String> valueReplacements) {}
+    public void execute(@NotNull Entity entity1, @NotNull Entity entity2, @NotNull String value) {}
+    public void executeAt(@NotNull HashMap<Location, String> locations) {}
+    public void executeData(@NotNull HashMap<RPPlayer, String> recipientValues, @NotNull HashMap<String, String> valueReplacements) {}
+    public void executeData(@NotNull HashMap<String, Entity> entities, @NotNull HashMap<RPPlayer, String> recipientValues, @NotNull HashMap<String, String> valueReplacements) {}
 }

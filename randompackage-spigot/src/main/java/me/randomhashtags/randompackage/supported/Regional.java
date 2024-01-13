@@ -6,6 +6,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -88,14 +89,15 @@ public interface Regional {
         return getEnemies(player.getUniqueId());
     }
 
-    Collection<UUID> getAssociates(UUID player);
-    Collection<UUID> getNeutrals(UUID player);
-    Collection<UUID> getAllies(UUID player);
-    Collection<UUID> getTruces(UUID player);
-    Collection<UUID> getEnemies(UUID player);
 
-    Collection<Player> getOnlineAssociates(UUID player);
-    Collection<Chunk> getRegionalChunks(String regionalIdentfier);
+    @NotNull Collection<UUID> getAssociates(UUID player);
+    @NotNull Collection<UUID> getNeutrals(UUID player);
+    @NotNull Collection<UUID> getAllies(UUID player);
+    @NotNull Collection<UUID> getTruces(UUID player);
+    @NotNull Collection<UUID> getEnemies(UUID player);
+
+    @NotNull Collection<Player> getOnlineAssociates(UUID player);
+    @NotNull Collection<Chunk> getRegionalChunks(String regionalIdentfier);
     String getRole(UUID uuid);
     String getRegionalIdentifier(UUID player);
     String getRegionalIdentifierAt(Location l);

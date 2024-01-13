@@ -5,10 +5,11 @@ import me.randomhashtags.randompackage.event.isDamagedEvent;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.jetbrains.annotations.NotNull;
 
 public final class DoesDieFromDamage extends AbstractEventCondition {
     @Override
-    public boolean check(Event event, String value) {
+    public boolean check(@NotNull Event event, @NotNull String value) {
         if(event instanceof isDamagedEvent) {
             final isDamagedEvent damageEvent = (isDamagedEvent) event;
             return damageEvent.getEntity().getHealth() - damageEvent.getDamage() <= 0.00 == Boolean.parseBoolean(value);

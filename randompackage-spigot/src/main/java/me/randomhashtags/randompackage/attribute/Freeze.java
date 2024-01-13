@@ -6,6 +6,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -26,7 +27,7 @@ public final class Freeze extends AbstractEventAttribute {
         tasks = null;
     }
     @Override
-    public void execute(PendingEventAttribute pending) {
+    public void execute(@NotNull PendingEventAttribute pending) {
         final Event event = pending.getEvent();
         final PlayerQuitEvent quitEvent = event instanceof PlayerQuitEvent ? (PlayerQuitEvent) event : null;
         if(quitEvent != null) {

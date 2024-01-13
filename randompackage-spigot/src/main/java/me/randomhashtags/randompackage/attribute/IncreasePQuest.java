@@ -6,13 +6,14 @@ import me.randomhashtags.randompackage.data.RPPlayer;
 import me.randomhashtags.randompackage.event.PlayerQuestCompleteEvent;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
 
 public final class IncreasePQuest extends AbstractEventAttribute {
     @Override
-    public void executeData(HashMap<String, Entity> entities, HashMap<RPPlayer, String> recipientValues, HashMap<String, String> valueReplacements) {
+    public void executeData(@NotNull HashMap<String, Entity> entities, @NotNull HashMap<RPPlayer, String> recipientValues, @NotNull HashMap<String, String> valueReplacements) {
         final List<String> msg = getRPConfig("player quests", "_settings.yml").getStringList("messages.completed");
         for(RPPlayer pdata : recipientValues.keySet()) {
             final String value = replaceValue(entities, recipientValues.get(pdata), valueReplacements);

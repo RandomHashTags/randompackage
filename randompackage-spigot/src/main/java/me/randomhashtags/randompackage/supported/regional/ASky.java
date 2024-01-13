@@ -39,24 +39,24 @@ public enum ASky implements RPFeatureSpigot, Regional {
         return i != null && (i.getMembers().contains(player) || areTeammates(i.getOwner(), player));
     }
 
-    public List<UUID> getAssociates(UUID player) {
+    public @NotNull List<UUID> getAssociates(UUID player) {
         final Island is = api.getIslandOwnedBy(player);
         return is != null ? is.getMembers() : new ArrayList<>();
     }
-    public List<UUID> getNeutrals(UUID player) {
+    public @NotNull List<UUID> getNeutrals(UUID player) {
         return api.getTeamMembers(player);
     }
-    public List<UUID> getAllies(UUID player) {
+    public @NotNull List<UUID> getAllies(UUID player) {
         return getNeutrals(player);
     }
-    public List<UUID> getTruces(UUID player) {
+    public @NotNull List<UUID> getTruces(UUID player) {
         return getNeutrals(player);
     }
-    public List<UUID> getEnemies(UUID player) {
+    public @NotNull List<UUID> getEnemies(UUID player) {
         return null;
     }
 
-    public List<Player> getOnlineAssociates(UUID player) {
+    public @NotNull List<Player> getOnlineAssociates(UUID player) {
         final List<UUID> a = getAssociates(player);
         final List<Player> p = new ArrayList<>();
         for(UUID u : a) {
@@ -68,7 +68,7 @@ public enum ASky implements RPFeatureSpigot, Regional {
         return p;
     }
 
-    public List<Chunk> getRegionalChunks(String regionalIdentifier) {
+    public @NotNull List<Chunk> getRegionalChunks(String regionalIdentifier) {
         final HashMap<UUID, Island> islands = api.getOwnedIslands();
         final World w = api.getIslandWorld();
         final List<Chunk> ch = new ArrayList<>();

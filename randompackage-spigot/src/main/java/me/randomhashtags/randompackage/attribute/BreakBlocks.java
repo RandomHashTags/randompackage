@@ -4,13 +4,14 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public final class BreakBlocks extends AbstractEventAttribute {
     @Override
-    public void executeAt(HashMap<Location, String> locations) {
+    public void executeAt(@NotNull HashMap<Location, String> locations) {
         for(Map.Entry<Location, String> locationMap : locations.entrySet()) {
             final Block block = locationMap.getKey().getBlock();
             final String[] values = locationMap.getValue().split(":");

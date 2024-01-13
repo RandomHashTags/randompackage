@@ -6,19 +6,20 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
 public final class DropItem extends AbstractEventAttribute {
     @Override
-    public void execute(PendingEventAttribute pending) {
+    public void execute(@NotNull PendingEventAttribute pending) {
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         for(Entity e : recipientValues.keySet()) {
             dropitem(e, recipientValues.get(e).replace("entity", e.getName()));
         }
     }
     @Override
-    public void executeAt(HashMap<Location, String> locations) {
+    public void executeAt(@NotNull HashMap<Location, String> locations) {
         for(Location l : locations.keySet()) {
             dropitem(l, locations.get(l));
         }

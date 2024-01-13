@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage;
 
-import me.randomhashtags.randompackage.addon.util.Nameable;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.*;
 import me.randomhashtags.randompackage.api.dev.InventoryPets;
@@ -28,7 +27,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -174,6 +172,7 @@ public final class RandomPackage extends JavaPlugin {
         }
         return enabled;
     }
+    @NotNull
     private HashMap<String, String> getHash(String...values) {
         final HashMap<String, String> a = new HashMap<>();
         for(int i = 0; i < values.length; i++) {
